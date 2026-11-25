@@ -302,3 +302,25 @@ footer {
         transition: none !important;
     }
 }
+
+/* Requisitos de alteração de senha */
+
+.password-requirements {
+    background: #0f172a;
+    border: 1px solid var(--border);
+    border-radius: 9px;
+    padding: 14px;
+    margin-bottom: 24px;
+}
+
+.password-requirements p {
+    font-size: 13px;
+    color: var(--secondary);
+    line-height: 1.8;
+    transition: color 0.2s;
+}
+
+.password-requirements p.valido {
+    color: #4ade80;
+}
+
