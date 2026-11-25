@@ -19,7 +19,6 @@
                     <rect x="4" y="11" width="16" height="11" rx="2"/>
                     <path d="M8 11V7a4 4 0 0 1 8 0v4"/>
                     <circle cx="12" cy="16" r="1"/>
-                    <path d="M12 17v2"/>
                 </svg>
             </div>
 
@@ -33,10 +32,10 @@
             <h2>Alteração de senha</h2>
 
             <p class="subtitle">
-                Por segurança, você deve criar uma nova senha antes de continuar.
+                Crie uma nova senha para acessar o sistema.
             </p>
 
-            <form id="alterarSenhaForm">
+            <form id="alterarSenhaForm" hidden>
 
                 <div class="form-group">
 
@@ -47,9 +46,10 @@
                         <input
                             type="password"
                             id="novaSenha"
-                            placeholder="Digite sua nova senha"
                             minlength="8"
+                            maxlength="72"
                             autocomplete="new-password"
+                            placeholder="Digite sua nova senha"
                             required>
 
                         <button
@@ -74,9 +74,10 @@
                         <input
                             type="password"
                             id="confirmarSenha"
-                            placeholder="Repita sua nova senha"
                             minlength="8"
+                            maxlength="72"
                             autocomplete="new-password"
+                            placeholder="Repita a nova senha"
                             required>
 
                         <button
@@ -103,17 +104,19 @@
                 </div>
 
                 <button type="submit" class="btn-login">
-                    Alterar senha e continuar
+                    Salvar nova senha
                 </button>
 
-                <div id="mensagem" role="status"></div>
-
             </form>
+
+            <div id="mensagem" role="status">
+                Verificando sessão...
+            </div>
 
             <div class="divider"></div>
 
             <div class="register">
-                <a href="index.html">Voltar ao login</a>
+                <a href="#" id="voltar">Voltar ao login</a>
             </div>
 
         </section>
@@ -124,29 +127,47 @@
 
     </main>
 
-    <script>
+    <script type="module">
 
-        const novaSenha =
+        import { supabase } from "./supabase.js";
+
+        import {
+            alterarSenha,
+            sair
+        } from "./auth.js";
+
+        const formulario =
+            document.getElementById("alterarSenhaForm");
+
+        const nova =
             document.getElementById("novaSenha");
 
-        const confirmarSenha =
+        const confirmar =
             document.getElementById("confirmarSenha");
 
         const mensagem =
             document.getElementById("mensagem");
 
-        const requisitoTamanho =
-            document.getElementById("requisitoTamanho");
+        const botao =
+            formulario.querySelector('button[type="submit"]');
 
-        const requisitoIgualdade =
-            document.getElementById("requisitoIgualdade");
+        const { data } = await supabase.auth.getUser();
 
-        // Mostrar e ocultar senhas
+        if (!data.user) {
+
+            window.location.replace("index.html");
+
+        } else {
+
+            formulario.hidden = false;
+            mensagem.textContent = "";
+
+        }
 
         document.querySelectorAll(".toggle-password")
-            .forEach(function (botao) {
+            .forEach(botao => {
 
-                botao.addEventListener("click", function () {
+                botao.addEventListener("click", () => {
 
                     const campo = document.getElementById(
                         botao.dataset.target
@@ -156,77 +177,112 @@
 
                     campo.type = mostrar ? "text" : "password";
 
-                    botao.textContent = mostrar
-                        ? "Ocultar"
-                        : "Mostrar";
+                    botao.textContent =
+                        mostrar ? "Ocultar" : "Mostrar";
 
                 });
 
             });
 
-        // Validar requisitos em tempo real
+        function validar() {
 
-        function validarRequisitos() {
+            const tamanho = nova.value.length >= 8;
 
-            const tamanhoValido = novaSenha.value.length >= 8;
+            const iguais =
+                nova.value.length > 0 &&
+                nova.value === confirmar.value;
 
-            const senhasIguais =
-                novaSenha.value.length > 0 &&
-                novaSenha.value === confirmarSenha.value;
+            const requisito1 =
+                document.getElementById("requisitoTamanho");
 
-            requisitoTamanho.textContent =
-                (tamanhoValido ? "✓" : "○") +
+            const requisito2 =
+                document.getElementById("requisitoIgualdade");
+
+            requisito1.textContent =
+                (tamanho ? "✓" : "○") +
                 " Mínimo de 8 caracteres";
 
-            requisitoIgualdade.textContent =
-                (senhasIguais ? "✓" : "○") +
+            requisito2.textContent =
+                (iguais ? "✓" : "○") +
                 " As senhas devem coincidir";
 
-            requisitoTamanho.classList.toggle(
-                "valido", tamanhoValido
-            );
+            requisito1.classList.toggle("valido", tamanho);
 
-            requisitoIgualdade.classList.toggle(
-                "valido", senhasIguais
-            );
+            requisito2.classList.toggle("valido", iguais);
+
+            return tamanho && iguais;
 
         }
 
-        novaSenha.addEventListener("input", validarRequisitos);
+        nova.addEventListener("input", validar);
 
-        confirmarSenha.addEventListener(
-            "input", validarRequisitos
-        );
+        confirmar.addEventListener("input", validar);
 
-        // Validar formulário
+        formulario.addEventListener("submit", async event => {
 
-        document.getElementById("alterarSenhaForm")
-            .addEventListener("submit", function (event) {
+            event.preventDefault();
 
-                event.preventDefault();
+            if (!validar()) {
 
                 mensagem.className = "erro";
 
-                if (novaSenha.value.length < 8) {
+                mensagem.textContent =
+                    "Verifique os requisitos da senha.";
 
-                    mensagem.textContent =
-                        "A senha deve ter no mínimo 8 caracteres.";
+                return;
+
+            }
+
+            botao.disabled = true;
+            botao.textContent = "Salvando...";
+
+            try {
+
+                const resultado = await alterarSenha(
+                    nova.value,
+                    confirmar.value
+                );
+
+                if (!resultado.sucesso) {
+
+                    mensagem.className = "erro";
+                    mensagem.textContent = resultado.mensagem;
 
                     return;
+
                 }
 
-                if (novaSenha.value !== confirmarSenha.value) {
+                nova.value = "";
+                confirmar.value = "";
 
-                    mensagem.textContent =
-                        "As senhas não coincidem.";
+                alert(
+                    "Senha alterada com sucesso! Entre novamente."
+                );
 
-                    return;
-                }
+                await sair();
 
-                mensagem.className = "";
+            } catch {
+
+                mensagem.className = "erro";
 
                 mensagem.textContent =
-                    "Dados validados. A autenticação ainda não foi conectada.";
+                    "Não foi possível alterar a senha.";
+
+            } finally {
+
+                botao.disabled = false;
+                botao.textContent = "Salvar nova senha";
+
+            }
+
+        });
+
+        document.getElementById("voltar")
+            .addEventListener("click", async event => {
+
+                event.preventDefault();
+
+                await sair();
 
             });
 
