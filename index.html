@@ -12,6 +12,7 @@
     <main class="login-container">
 
         <div class="login-header">
+
             <div class="logo">
                 <svg width="36" height="36" viewBox="0 0 24 24"
                      fill="none" stroke="currentColor" stroke-width="1.8">
@@ -22,17 +23,22 @@
 
             <h1>Sistema de Gestão</h1>
             <p>Área de acesso restrito</p>
+
         </div>
 
         <section class="login-card">
 
             <h2>Bem-vindo</h2>
-            <p class="subtitle">Insira suas credenciais para continuar.</p>
+
+            <p class="subtitle">
+                Insira suas credenciais para continuar.
+            </p>
 
             <form id="loginForm">
 
                 <div class="form-group">
                     <label for="rf">Registro Funcional (RF)</label>
+
                     <input
                         type="text"
                         id="rf"
@@ -45,15 +51,16 @@
                 </div>
 
                 <div class="form-group">
+
                     <label for="senha">Senha</label>
 
                     <div class="password-container">
+
                         <input
                             type="password"
                             id="senha"
                             name="senha"
                             placeholder="Digite sua senha"
-                            minlength="8"
                             autocomplete="current-password"
                             required>
 
@@ -63,7 +70,9 @@
                             class="toggle-password">
                             Mostrar
                         </button>
+
                     </div>
+
                 </div>
 
                 <div class="form-options">
@@ -83,8 +92,9 @@
             <div class="divider"></div>
 
             <div class="register">
-                Não possui cadastro?
-                <a href="cadastro.html">Criar conta</a>
+                Não possui acesso ao sistema?
+                <br>
+                Entre em contato com o administrador.
             </div>
 
         </section>
@@ -96,32 +106,57 @@
     </main>
 
     <script>
+
         const senha = document.getElementById("senha");
         const toggle = document.getElementById("togglePassword");
         const mensagem = document.getElementById("mensagem");
 
         toggle.addEventListener("click", function () {
+
             const mostrar = senha.type === "password";
 
             senha.type = mostrar ? "text" : "password";
-            toggle.textContent = mostrar ? "Ocultar" : "Mostrar";
+
+            toggle.textContent = mostrar
+                ? "Ocultar"
+                : "Mostrar";
+
         });
 
         document.getElementById("loginForm")
             .addEventListener("submit", function (event) {
+
                 event.preventDefault();
+
+                const rf = document.getElementById("rf").value.trim();
+
+                if (!/^\d+$/.test(rf)) {
+
+                    mensagem.className = "erro";
+                    mensagem.textContent = "Informe um RF válido.";
+
+                    return;
+                }
+
+                mensagem.className = "";
 
                 mensagem.textContent =
                     "O sistema de autenticação ainda não foi configurado.";
+
             });
 
         document.getElementById("forgotPassword")
             .addEventListener("click", function (event) {
+
                 event.preventDefault();
 
+                mensagem.className = "";
+
                 mensagem.textContent =
-                    "A recuperação de senha será disponibilizada em breve.";
+                    "Para redefinir sua senha, entre em contato com o administrador do sistema.";
+
             });
+
     </script>
 
 </body>
