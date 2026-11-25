@@ -1,4 +1,4 @@
-
+@import url("https://cdn.jsdelivr.net/npm/sweetalert2@11.26.25/dist/sweetalert2.min.css");
 :root {
     --layout-bg: #0f172a;
     --layout-sidebar: #111c2e;
