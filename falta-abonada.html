@@ -28,17 +28,6 @@
             font-size: 13px;
             font-weight: 600;
             margin-bottom: 9px;
-            color: var(--layout-secondary);
-        }
-
-        .consulta-rf {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .consulta-rf input {
-            max-width: 240px;
         }
 
         .form-grid {
@@ -65,30 +54,21 @@
         .orientacao {
             padding: 16px;
             border: 1px solid var(--layout-border);
-            border-left: 4px solid #3273dc;
+            border-left: 4px solid #22c55e;
             border-radius: 8px;
             margin-bottom: 25px;
             background: var(--layout-card);
-            color: var(--layout-secondary);
             font-size: 13px;
             line-height: 1.7;
         }
 
         input[readonly] {
             opacity: .8;
+            cursor: default;
         }
 
-        #statusConsulta {
-            font-size: 12px;
-            margin-top: 10px;
-        }
-
-        .texto-sucesso {
-            color: var(--layout-success);
-        }
-
-        .texto-erro {
-            color: var(--layout-danger);
+        .titulo-secao {
+            margin-bottom: 22px;
         }
 
         @media (max-width: 750px) {
@@ -99,12 +79,7 @@
                 gap: 0;
             }
 
-            .consulta-rf input {
-                max-width: none;
-            }
-
-            .form-acoes button,
-            .form-acoes a {
+            .form-acoes button {
                 width: 100%;
             }
 
@@ -118,7 +93,7 @@
 
     <div id="carregando" class="sg-carregando">
 
-        Verificando permissões...
+        Verificando sessão...
 
     </div>
 
@@ -139,18 +114,18 @@
 
             <div class="orientacao">
 
-                Informe o registro funcional para
-                consultar os dados do funcionário
-                no Crachá Digital.
+                Seus dados funcionais foram preenchidos
+                automaticamente com base no seu cadastro.
 
-                Os campos de nome e cargo poderão
-                ser ajustados manualmente.
+                Informe apenas a data da falta abonada.
 
             </div>
 
             <section class="sg-card">
 
-                <h2>Dados do funcionário</h2>
+                <h2 class="titulo-secao">
+                    Dados do funcionário
+                </h2>
 
                 <form id="formAbonada">
 
@@ -160,32 +135,11 @@
                             Registro Funcional (RF)
                         </label>
 
-                        <div class="consulta-rf">
-
-                            <input
-                                type="text"
-                                id="registro"
-                                class="sg-input"
-                                maxlength="6"
-                                inputmode="numeric"
-                                pattern="[0-9]{1,6}"
-                                placeholder="Digite o RF"
-                                required>
-
-                            <button
-                                type="button"
-                                id="consultar"
-                                class="sg-btn">
-
-                                Consultar
-
-                            </button>
-
-                        </div>
-
-                        <div id="statusConsulta"
-                             role="status">
-                        </div>
+                        <input
+                            type="text"
+                            id="registro"
+                            class="sg-input"
+                            readonly>
 
                     </div>
 
@@ -199,9 +153,7 @@
                             type="text"
                             id="nome"
                             class="sg-input"
-                            maxlength="150"
-                            placeholder="Nome do funcionário"
-                            required>
+                            readonly>
 
                     </div>
 
@@ -217,9 +169,7 @@
                                 type="text"
                                 id="cargo"
                                 class="sg-input"
-                                maxlength="120"
-                                placeholder="Cargo do funcionário"
-                                required>
+                                readonly>
 
                         </div>
 
@@ -233,14 +183,15 @@
                                 type="text"
                                 id="secretaria"
                                 class="sg-input"
-                                placeholder="Secretaria"
                                 readonly>
 
                         </div>
 
                     </div>
 
-                    <h2>Dados do requerimento</h2>
+                    <h2 class="titulo-secao">
+                        Dados do requerimento
+                    </h2>
 
                     <div class="form-grid-datas">
 
@@ -314,7 +265,7 @@
                             id="limpar"
                             class="sg-btn sg-btn-secondary">
 
-                            Limpar campos
+                            Limpar data
 
                         </button>
 
@@ -333,4 +284,5 @@
     </script>
 
 </body>
+
 </html>
