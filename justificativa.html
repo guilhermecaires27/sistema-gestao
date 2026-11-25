@@ -1,0 +1,354 @@
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Justificativa | Sistema de Gestão</title>
+
+    <link rel="stylesheet" href="layout.css">
+
+    <style>
+
+        .just-formulario {
+            max-width: 1000px;
+        }
+
+        .just-grupo {
+            margin-bottom: 20px;
+        }
+
+        .just-grupo label {
+            display: block;
+            font-size: 13px;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .just-grid {
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 20px;
+        }
+
+        .just-bloco {
+            padding: 20px;
+            border: 1px solid var(--layout-border);
+            border-radius: 10px;
+            margin-bottom: 22px;
+        }
+
+        .just-bloco h3 {
+            margin: 0 0 18px;
+        }
+
+        .just-horario {
+            display: flex;
+            align-items: flex-end;
+            gap: 10px;
+            max-width: 380px;
+            margin-bottom: 12px;
+        }
+
+        .just-horario > div {
+            flex: 1;
+        }
+
+        .just-horario label {
+            display: block;
+            margin-bottom: 8px;
+            font-size: 13px;
+        }
+
+        .just-textarea {
+            width: 100%;
+            min-height: 130px;
+            resize: vertical;
+            font-family: inherit;
+        }
+
+        .just-contador {
+            text-align: right;
+            font-size: 12px;
+            margin-top: 6px;
+            opacity: .7;
+        }
+
+        .just-acoes {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 24px;
+            padding-top: 22px;
+            border-top: 1px solid var(--layout-border);
+        }
+
+        .just-info {
+            padding: 16px;
+            border: 1px solid var(--layout-border);
+            border-left: 4px solid #22c55e;
+            border-radius: 8px;
+            margin-bottom: 24px;
+            font-size: 13px;
+            line-height: 1.6;
+        }
+
+        .just-ajuda {
+            font-size: 12px;
+            opacity: .8;
+            line-height: 1.6;
+            margin-top: 10px;
+        }
+
+        input[readonly] {
+            opacity: .8;
+            cursor: default;
+        }
+
+        input[type="file"] {
+            max-width: 100%;
+        }
+
+        @media (max-width: 750px) {
+
+            .just-grid {
+                grid-template-columns: 1fr;
+                gap: 0;
+            }
+
+            .just-acoes button {
+                width: 100%;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+<body class="sg-body">
+
+    <div id="carregando" class="sg-carregando">
+        Verificando sessão...
+    </div>
+
+    <div id="app" hidden>
+
+        <header class="sg-cabecalho">
+
+            <h1>Justificativa</h1>
+
+            <p>
+                Emissão de declaração para justificativa
+                de ponto.
+            </p>
+
+        </header>
+
+        <div class="just-formulario">
+
+            <div class="just-info">
+
+                Seus dados funcionais foram preenchidos
+                automaticamente.
+
+                Informe a data, os horários e o motivo
+                da justificativa.
+
+            </div>
+
+            <section class="sg-card">
+
+                <h2>Dados do servidor</h2>
+
+                <form id="formJustificativa">
+
+                    <div class="just-grid">
+
+                        <div class="just-grupo">
+
+                            <label for="rf">RF</label>
+
+                            <input
+                                id="rf"
+                                type="text"
+                                class="sg-input"
+                                readonly>
+
+                        </div>
+
+                        <div class="just-grupo">
+
+                            <label for="nome">
+                                Nome do servidor
+                            </label>
+
+                            <input
+                                id="nome"
+                                type="text"
+                                class="sg-input"
+                                readonly>
+
+                        </div>
+
+                    </div>
+
+                    <div class="just-grupo">
+
+                        <label for="cargo">
+                            Cargo / função
+                        </label>
+
+                        <input
+                            id="cargo"
+                            type="text"
+                            class="sg-input"
+                            readonly>
+
+                    </div>
+
+                    <div class="just-grupo">
+
+                        <label for="data">
+                            Data do ponto a justificar *
+                        </label>
+
+                        <input
+                            id="data"
+                            type="date"
+                            class="sg-input"
+                            required>
+
+                    </div>
+
+                    <section class="just-bloco">
+
+                        <h3>Horários do ponto</h3>
+
+                        <div id="listaHorarios"></div>
+
+                        <button
+                            type="button"
+                            id="adicionarHorario"
+                            class="sg-btn sg-btn-secondary">
+
+                            + Adicionar horário
+
+                        </button>
+
+                    </section>
+
+                    <div class="just-grupo">
+
+                        <label for="motivo">
+                            Motivo da justificativa *
+                        </label>
+
+                        <textarea
+                            id="motivo"
+                            class="sg-input just-textarea"
+                            maxlength="500"
+                            placeholder="Descreva o motivo da justificativa..."
+                            required></textarea>
+
+                        <div
+                            id="contador"
+                            class="just-contador">
+
+                            0/500 caracteres
+
+                        </div>
+
+                    </div>
+
+                    <section class="just-bloco">
+
+                        <h3>
+
+                            Declaração ou atestado médico
+
+                        </h3>
+
+                        <div class="just-grupo">
+
+                            <label for="anexo">
+                                Anexo opcional
+                            </label>
+
+                            <input
+                                id="anexo"
+                                type="file"
+                                class="sg-input"
+                                accept=".jpg,.jpeg,.png,.pdf,image/jpeg,image/png,application/pdf">
+
+                            <p class="just-ajuda">
+
+                                JPG, PNG ou PDF, até 10 MB.
+                                O anexo será incluído após
+                                a justificativa no mesmo PDF
+                                quando a geração for habilitada.
+
+                            </p>
+
+                            <p id="infoAnexo"
+                               class="just-ajuda">
+                            </p>
+
+                        </div>
+
+                        <button
+                            type="button"
+                            id="removerAnexo"
+                            class="sg-btn sg-btn-secondary"
+                            hidden>
+
+                            Remover anexo
+
+                        </button>
+
+                    </section>
+
+                    <div class="just-acoes">
+
+                        <button
+                            type="submit"
+                            id="gerarPdf"
+                            class="sg-btn"
+                            disabled>
+
+                            Gerar PDF
+
+                        </button>
+
+                        <button
+                            type="button"
+                            id="limpar"
+                            class="sg-btn sg-btn-secondary">
+
+                            Limpar campos
+
+                        </button>
+
+                    </div>
+
+                </form>
+
+            </section>
+
+        </div>
+
+    </div>
+
+    <script
+        type="module"
+        src="./justificativa.js">
+    </script>
+
+</body>
+
+</html>
