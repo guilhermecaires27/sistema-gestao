@@ -2,277 +2,53 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-
     <meta charset="UTF-8">
     <meta name="viewport"
           content="width=device-width, initial-scale=1.0">
 
     <title>Início | Sistema de Gestão</title>
 
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="layout.css">
 
     <style>
-
-        body {
-            display: block;
-            padding: 0;
-            background: #0f172a;
-        }
-
-        [hidden] {
-            display: none !important;
-        }
-
-        /* Menu lateral */
-
-        .sidebar {
-            position: fixed;
-            inset: 0 auto 0 0;
-            width: 250px;
-            padding: 25px 16px;
-            background: #111c2e;
-            border-right: 1px solid var(--border);
-            display: flex;
-            flex-direction: column;
-            z-index: 100;
-            overflow-y: auto;
-        }
-
-        .marca {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            padding: 8px;
-            margin-bottom: 28px;
-        }
-
-        .marca h2 {
-            font-size: 18px;
-        }
-
-        .marca p {
-            font-size: 11px;
-            color: var(--secondary);
-            margin-top: 4px;
-        }
-
-        .marca-icone {
-            width: 42px;
-            height: 42px;
-            border-radius: 12px;
-            background: #1e3a5f;
-            color: #60a5fa;
-            display: grid;
-            place-items: center;
-            flex-shrink: 0;
-        }
-
-        .menu-titulo {
-            font-size: 10px;
-            letter-spacing: 1px;
-            color: #64748b;
-            font-weight: 700;
-            padding: 12px;
-            margin-top: 10px;
-        }
-
-        .menu a,
-        .menu button {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            width: 100%;
-            padding: 13px 14px;
-            border-radius: 8px;
-            margin-bottom: 6px;
-            background: transparent;
-            border: none;
-            color: #cbd5e1;
-            font-size: 14px;
-            text-align: left;
-            text-decoration: none;
-            cursor: pointer;
-        }
-
-        .menu a:hover,
-        .menu button:hover {
-            background: #1e293b;
-            color: white;
-        }
-
-        .menu .selecionado {
-            background: #2563eb;
-            color: white;
-        }
-
-        .menu svg {
-            width: 19px;
-            height: 19px;
-            flex-shrink: 0;
-        }
-
-        .sidebar-footer {
-            margin-top: auto;
-            padding-top: 24px;
-        }
-
-        .btn-sair {
-            width: 100%;
-            padding: 13px;
-            background: #7f1d1d55;
-            color: #f87171;
-            border: 1px solid #7f1d1d;
-            border-radius: 8px;
-            cursor: pointer;
-            font-size: 14px;
-        }
-
-        .btn-sair:hover {
-            background: #991b1b;
-            color: white;
-        }
-
-        /* Conteúdo principal */
-
-        .conteudo {
-            margin-left: 250px;
-            min-height: 100vh;
-        }
-
-        .topbar {
-            min-height: 75px;
-            padding: 16px 32px;
-            border-bottom: 1px solid var(--border);
-            background: #111c2e;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 15px;
-        }
-
-        .topbar h2 {
-            font-size: 17px;
-        }
-
-        .usuario-topo {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-
-        .usuario-topo strong {
-            display: block;
-            font-size: 13px;
-        }
-
-        .usuario-topo span {
-            font-size: 11px;
-            color: var(--secondary);
-        }
-
-        .avatar {
-            width: 42px;
-            height: 42px;
-            background: #1e3a5f;
-            color: #93c5fd;
-            border: 1px solid #334e77;
-            border-radius: 50%;
-            display: grid;
-            place-items: center;
-            font-weight: 700;
-            flex-shrink: 0;
-        }
-
-        .pagina {
-            max-width: 1500px;
-            margin: auto;
-            padding: 32px;
-        }
-
-        .boas-vindas {
-            margin-bottom: 28px;
-        }
-
-        .boas-vindas h1 {
-            font-size: 30px;
-            margin-bottom: 10px;
-        }
-
-        .boas-vindas p {
-            color: var(--secondary);
-            font-size: 14px;
-        }
-
-        .data {
-            color: #60a5fa !important;
-            font-size: 13px !important;
-            margin-bottom: 14px;
-            text-transform: capitalize;
-        }
-
-        /* Cartão do funcionário */
-
-        .perfil-card {
-            background: var(--card);
-            border: 1px solid var(--border);
-            border-radius: 14px;
-            padding: 26px;
-            margin-bottom: 30px;
-        }
-
         .perfil-header {
             display: flex;
             align-items: center;
             gap: 18px;
-            padding-bottom: 24px;
-            border-bottom: 1px solid var(--border);
+            padding-bottom: 22px;
+            border-bottom: 1px solid var(--layout-border);
         }
 
-        .perfil-header .avatar {
+        .perfil-header .sg-avatar {
             width: 68px;
             height: 68px;
             font-size: 24px;
         }
 
         .perfil-header h2 {
-            font-size: 22px;
+            margin: 0 0 10px;
             overflow-wrap: anywhere;
         }
 
-        .nivel {
-            display: inline-block;
-            color: #60a5fa;
-            background: #2563eb20;
-            padding: 5px 10px;
-            border-radius: 5px;
-            font-size: 12px;
-            margin-top: 8px;
-        }
-
-        .nivel.principal {
-            color: #fbbf24;
-            background: #f59e0b15;
-        }
-
-        .dados-grid {
+        .dados {
             display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 18px;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 16px;
             margin-top: 24px;
         }
 
         .dado {
-            background: #0f172a;
-            border: 1px solid var(--border);
+            background: var(--layout-bg);
+            border: 1px solid var(--layout-border);
+            padding: 18px;
             border-radius: 9px;
-            padding: 17px;
             overflow-wrap: anywhere;
         }
 
         .dado span {
             display: block;
+            color: var(--layout-secondary);
             font-size: 12px;
-            color: var(--secondary);
             margin-bottom: 10px;
         }
 
@@ -280,716 +56,246 @@
             font-size: 15px;
         }
 
-        .validado {
-            color: #4ade80;
-            margin-top: 22px;
-            font-size: 13px;
-        }
-
-        /* Atalhos */
-
-        .secao-titulo {
-            font-size: 20px;
-            margin-bottom: 18px;
-        }
-
-        .atalhos {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 18px;
-            margin-bottom: 30px;
-        }
-
         .atalho {
             display: block;
-            width: 100%;
-            text-align: left;
-            background: var(--card);
-            border: 1px solid var(--border);
+            background: var(--layout-card);
+            border: 1px solid var(--layout-border);
             border-radius: 12px;
             padding: 22px;
+            color: var(--layout-text);
             text-decoration: none;
-            color: white;
-            transition: 0.2s;
-            cursor: pointer;
-            font-family: inherit;
         }
 
         .atalho:hover {
-            transform: translateY(-3px);
             border-color: #60a5fa;
-            color: white;
-            text-decoration: none;
-        }
-
-        .atalho-icone {
-            display: grid;
-            place-items: center;
-            width: 46px;
-            height: 46px;
-            background: #2563eb20;
-            border-radius: 10px;
-            color: #60a5fa;
-            margin-bottom: 18px;
-        }
-
-        .atalho-icone svg {
-            width: 24px;
-            height: 24px;
         }
 
         .atalho h3 {
-            font-size: 15px;
-            margin-bottom: 8px;
+            font-size: 16px;
         }
 
         .atalho p {
-            font-size: 12px;
+            color: var(--layout-secondary);
+            font-size: 13px;
             line-height: 1.6;
-            color: var(--secondary);
         }
 
-        /* Avisos */
-
-        .avisos {
-            background: var(--card);
-            border: 1px solid var(--border);
-            padding: 24px;
-            border-radius: 12px;
+        .atalho-icone {
+            font-size: 28px;
+            margin-bottom: 14px;
         }
 
-        .avisos p {
-            color: var(--secondary);
-            font-size: 14px;
-            line-height: 1.7;
+        .data-atual {
+            color: #60a5fa;
+            font-size: 13px;
+            text-transform: capitalize;
+            margin-bottom: 12px;
         }
 
-        #carregando {
-            padding: 60px;
-            text-align: center;
-            color: var(--secondary);
+        .validacao {
+            color: var(--layout-success);
+            font-size: 13px;
+            margin: 22px 0 0;
         }
 
-        #abrirMenu {
-            display: none;
-            background: transparent;
-            color: white;
-            border: 1px solid var(--border);
-            border-radius: 6px;
-            padding: 8px 12px;
-            cursor: pointer;
+        .nivel {
+            color: #60a5fa;
+            font-size: 13px;
         }
 
-        #overlay {
-            position: fixed;
-            inset: 0;
-            background: #0009;
-            z-index: 90;
-        }
-
-        @media (max-width: 1150px) {
-
-            .atalhos {
-                grid-template-columns: repeat(2, 1fr);
-            }
-
-            .dados-grid {
-                grid-template-columns: repeat(2, 1fr);
-            }
-
+        .nivel.principal {
+            color: #fbbf24;
         }
 
         @media (max-width: 750px) {
-
-            .sidebar {
-                transform: translateX(-100%);
-                transition: transform 0.25s;
-            }
-
-            .sidebar.aberto {
-                transform: translateX(0);
-            }
-
-            .conteudo {
-                margin-left: 0;
-            }
-
-            #abrirMenu {
-                display: block;
-            }
-
-            .topbar {
-                padding: 15px;
-            }
-
-            .usuario-topo div:first-child {
-                display: none;
-            }
-
-            .pagina {
-                padding: 18px;
-            }
-
-            .boas-vindas h1 {
-                font-size: 25px;
-            }
-
-            .perfil-card {
-                padding: 20px;
-            }
-
-            .perfil-header h2 {
-                font-size: 18px;
-            }
-
-            .dados-grid {
+            .dados {
                 grid-template-columns: 1fr;
             }
 
-            .atalhos {
-                gap: 12px;
-            }
-
             .atalho {
-                padding: 15px;
+                padding: 16px;
             }
-
         }
-
-        @media (prefers-reduced-motion: reduce) {
-
-            * {
-                transition: none !important;
-            }
-
-        }
-
     </style>
-
 </head>
 
-<body>
+<body class="sg-body">
 
-    <div id="carregando">
+    <div id="carregando" class="sg-carregando">
         Verificando sua sessão...
     </div>
 
     <div id="app" hidden>
 
-        <div id="overlay" hidden></div>
+        <header class="sg-cabecalho">
 
-        <!-- Menu lateral -->
+            <div id="dataAtual" class="data-atual"></div>
 
-        <aside class="sidebar" id="sidebar">
+            <h1 id="saudacao"></h1>
 
-            <div class="marca">
+            <p>Seja bem-vindo ao Sistema de Gestão.</p>
 
-                <div class="marca-icone">
+        </header>
 
-                    <svg width="25" height="25"
-                         viewBox="0 0 24 24"
-                         fill="none"
-                         stroke="currentColor"
-                         stroke-width="1.8">
+        <section class="sg-card" id="meuPerfil">
 
-                        <path d="M12 22s8-4 8-11V5l-8-3-8 3v6c0 7 8 11 8 11z"/>
+            <div class="perfil-header">
 
-                        <path d="m9 12 2 2 4-4"/>
-
-                    </svg>
-
-                </div>
+                <div class="sg-avatar" id="avatar"></div>
 
                 <div>
-                    <h2>Sistema de Gestão</h2>
-                    <p>Portal de serviços</p>
+                    <h2 id="nome"></h2>
+                    <span id="nivel" class="nivel"></span>
                 </div>
 
             </div>
 
-            <nav class="menu">
+            <div class="dados">
 
-                <p class="menu-titulo">
-                    PRINCIPAL
-                </p>
-
-                <a href="dashboard.html"
-                   class="selecionado">
-
-                    <svg viewBox="0 0 24 24"
-                         fill="none"
-                         stroke="currentColor"
-                         stroke-width="1.8">
-                        <rect x="3" y="3" width="7" height="7" rx="1"/>
-                        <rect x="14" y="3" width="7" height="7" rx="1"/>
-                        <rect x="3" y="14" width="7" height="7" rx="1"/>
-                        <rect x="14" y="14" width="7" height="7" rx="1"/>
-                    </svg>
-
-                    Início
-
-                </a>
-
-                <a href="#meuPerfil">
-
-                    <svg viewBox="0 0 24 24"
-                         fill="none"
-                         stroke="currentColor"
-                         stroke-width="1.8">
-                        <circle cx="12" cy="8" r="4"/>
-                        <path d="M4 21v-2a8 8 0 0 1 16 0v2"/>
-                    </svg>
-
-                    Meu perfil
-
-                </a>
-
-                <a href="https://crachadigital.praiagrande.sp.gov.br/"
-                   target="_blank"
-                   rel="noopener noreferrer"
-                   id="menuCracha">
-
-                    <svg viewBox="0 0 24 24"
-                         fill="none"
-                         stroke="currentColor"
-                         stroke-width="1.8">
-                        <rect x="2" y="5" width="20" height="14" rx="2"/>
-                        <circle cx="8" cy="11" r="2"/>
-                        <path d="M5 16c0-4 6-4 6 0M14 10h5M14 14h5"/>
-                    </svg>
-
-                    Crachá Digital
-
-                </a>
-
-                <a href="alterar-senha.html">
-
-                    <svg viewBox="0 0 24 24"
-                         fill="none"
-                         stroke="currentColor"
-                         stroke-width="1.8">
-                        <rect x="4" y="11" width="16" height="11" rx="2"/>
-                        <path d="M8 11V7a4 4 0 0 1 8 0v4"/>
-                    </svg>
-
-                    Alterar senha
-
-                </a>
-
-                <!-- Menu administrativo -->
-
-                <div id="menuAdmin" hidden>
-
-                    <p class="menu-titulo">
-                        ADMINISTRAÇÃO
-                    </p>
-
-                    <a href="admin.html">
-
-                        <svg viewBox="0 0 24 24"
-                             fill="none"
-                             stroke="currentColor"
-                             stroke-width="1.8">
-                            <circle cx="9" cy="7" r="4"/>
-                            <path d="M2 21v-3a7 7 0 0 1 14 0v3"/>
-                            <path d="M17 4a4 4 0 0 1 0 8M19 14a6 6 0 0 1 3 6"/>
-                        </svg>
-
-                        Gerenciar usuários
-
-                    </a>
-
-                    <a href="historico.html">
-
-                        <svg viewBox="0 0 24 24"
-                             fill="none"
-                             stroke="currentColor"
-                             stroke-width="1.8">
-                            <circle cx="12" cy="12" r="9"/>
-                            <path d="M12 7v5l3 2"/>
-                        </svg>
-
-                        Histórico de acessos
-
-                    </a>
-
+                <div class="dado">
+                    <span>Registro Funcional</span>
+                    <strong id="rf"></strong>
                 </div>
 
-            </nav>
+                <div class="dado">
+                    <span>Cargo</span>
+                    <strong id="cargo"></strong>
+                </div>
 
-            <div class="sidebar-footer">
-
-                <button id="sair" class="btn-sair">
-                    Sair do sistema
-                </button>
+                <div class="dado">
+                    <span>Secretaria</span>
+                    <strong id="secretaria"></strong>
+                </div>
 
             </div>
 
-        </aside>
+            <p class="validacao">
+                ✓ Sessão validada pelo Crachá Digital
+            </p>
 
-        <!-- Conteúdo -->
+        </section>
 
-        <div class="conteudo">
+        <h2>Acesso rápido</h2>
 
-            <header class="topbar">
+        <section class="sg-grid">
 
-                <button id="abrirMenu"
-                        aria-label="Abrir menu"
-                        aria-expanded="false">
-                    ☰
-                </button>
+            <a href="admin.html"
+               class="atalho"
+               id="atalhoAdmin"
+               hidden>
 
-                <h2>Portal do usuário</h2>
+                <div class="atalho-icone">👥</div>
 
-                <div class="usuario-topo">
+                <h3>Usuários</h3>
 
-                    <div>
+                <p>Gerencie contas e permissões.</p>
 
-                        <strong id="nomeTopo"></strong>
+            </a>
 
-                        <span id="nivelTopo"></span>
+            <a href="historico.html"
+               class="atalho"
+               id="atalhoHistorico"
+               hidden>
 
-                    </div>
+                <div class="atalho-icone">📋</div>
 
-                    <div class="avatar" id="avatarTopo"></div>
+                <h3>Histórico</h3>
 
-                </div>
+                <p>Consulte as atividades do sistema.</p>
 
-            </header>
+            </a>
 
-            <main class="pagina">
+            <a id="atalhoCracha"
+               class="atalho"
+               target="_blank"
+               rel="noopener noreferrer">
 
-                <section class="boas-vindas">
+                <div class="atalho-icone">🪪</div>
 
-                    <p id="dataAtual" class="data"></p>
+                <h3>Crachá Digital</h3>
 
-                    <h1 id="saudacao"></h1>
+                <p>Acesse seu crachá funcional.</p>
 
-                    <p>
-                        Seja bem-vindo ao Sistema de Gestão.
-                    </p>
+            </a>
 
-                </section>
+            <a href="alterar-senha.html"
+               class="atalho">
 
-                <section class="perfil-card" id="meuPerfil">
+                <div class="atalho-icone">🔑</div>
 
-                    <div class="perfil-header">
+                <h3>Alterar senha</h3>
 
-                        <div class="avatar" id="avatar"></div>
+                <p>Atualize sua senha de acesso.</p>
 
-                        <div>
+            </a>
 
-                            <h2 id="nome"></h2>
+        </section>
 
-                            <span id="nivel" class="nivel"></span>
+        <section class="sg-card">
 
-                        </div>
+            <h2>Avisos do sistema</h2>
 
-                    </div>
+            <p style="color:var(--layout-secondary)">
+                Nenhum aviso disponível no momento.
+            </p>
 
-                    <div class="dados-grid">
-
-                        <div class="dado">
-
-                            <span>Registro Funcional</span>
-
-                            <strong id="rf"></strong>
-
-                        </div>
-
-                        <div class="dado">
-
-                            <span>Cargo</span>
-
-                            <strong id="cargo"></strong>
-
-                        </div>
-
-                        <div class="dado">
-
-                            <span>Secretaria</span>
-
-                            <strong id="secretaria"></strong>
-
-                        </div>
-
-                    </div>
-
-                    <p class="validado">
-                        ✓ Sessão validada pelo Crachá Digital
-                    </p>
-
-                </section>
-
-                <!-- Atalhos -->
-
-                <h2 class="secao-titulo">
-                    Acesso rápido
-                </h2>
-
-                <section class="atalhos">
-
-                    <a href="admin.html"
-                       class="atalho"
-                       id="atalhoAdmin"
-                       hidden>
-
-                        <div class="atalho-icone">
-
-                            <svg viewBox="0 0 24 24"
-                                 fill="none"
-                                 stroke="currentColor"
-                                 stroke-width="1.8">
-                                <circle cx="9" cy="7" r="4"/>
-                                <path d="M2 21v-3a7 7 0 0 1 14 0v3"/>
-                                <path d="M17 4a4 4 0 0 1 0 8M19 14a6 6 0 0 1 3 6"/>
-                            </svg>
-
-                        </div>
-
-                        <h3>Usuários</h3>
-
-                        <p>
-                            Gerencie contas, acessos e permissões.
-                        </p>
-
-                    </a>
-
-                    <a href="historico.html"
-                       class="atalho"
-                       id="atalhoHistorico"
-                       hidden>
-
-                        <div class="atalho-icone">
-
-                            <svg viewBox="0 0 24 24"
-                                 fill="none"
-                                 stroke="currentColor"
-                                 stroke-width="1.8">
-                                <circle cx="12" cy="12" r="9"/>
-                                <path d="M12 7v5l3 2"/>
-                            </svg>
-
-                        </div>
-
-                        <h3>Histórico</h3>
-
-                        <p>
-                            Consulte os registros de atividades.
-                        </p>
-
-                    </a>
-
-                    <a href="https://crachadigital.praiagrande.sp.gov.br/"
-                       target="_blank"
-                       rel="noopener noreferrer"
-                       class="atalho"
-                       id="atalhoCracha">
-
-                        <div class="atalho-icone">
-
-                            <svg viewBox="0 0 24 24"
-                                 fill="none"
-                                 stroke="currentColor"
-                                 stroke-width="1.8">
-                                <rect x="2" y="5" width="20" height="14" rx="2"/>
-                                <circle cx="8" cy="11" r="2"/>
-                                <path d="M5 16c0-4 6-4 6 0M14 10h5M14 14h5"/>
-                            </svg>
-
-                        </div>
-
-                        <h3>Crachá Digital</h3>
-
-                        <p>
-                            Acesse seu crachá funcional.
-                        </p>
-
-                    </a>
-
-                    <a href="alterar-senha.html"
-                       class="atalho">
-
-                        <div class="atalho-icone">
-
-                            <svg viewBox="0 0 24 24"
-                                 fill="none"
-                                 stroke="currentColor"
-                                 stroke-width="1.8">
-                                <rect x="4" y="11" width="16" height="11" rx="2"/>
-                                <path d="M8 11V7a4 4 0 0 1 8 0v4"/>
-                            </svg>
-
-                        </div>
-
-                        <h3>Alterar senha</h3>
-
-                        <p>
-                            Atualize sua senha de acesso.
-                        </p>
-
-                    </a>
-
-                </section>
-
-                <section class="avisos">
-
-                    <h2 class="secao-titulo">
-                        Avisos do sistema
-                    </h2>
-
-                    <p>
-                        Nenhum aviso disponível no momento.
-                    </p>
-
-                </section>
-
-                <footer>
-
-                    Sistema de Gestão &bull; Versão 1.0
-
-                </footer>
-
-            </main>
-
-        </div>
+        </section>
 
     </div>
 
     <script type="module">
 
-        import {
-            obterPerfil,
-            sair
-        } from "./auth.js";
+        import { montarLayout } from "./layout.js";
 
         const $ = id => document.getElementById(id);
-
-        const permissoes = {
-            superadmin: "Administrador principal",
-            admin: "Administrador",
-            usuario: "Usuário comum"
-        };
-
-        function fecharMenu() {
-
-            $("sidebar").classList.remove("aberto");
-
-            $("overlay").hidden = true;
-
-            $("abrirMenu").setAttribute(
-                "aria-expanded", "false"
-            );
-
-        }
-
-        $("abrirMenu").addEventListener("click", () => {
-
-            const aberto = $("sidebar")
-                .classList.toggle("aberto");
-
-            $("overlay").hidden = !aberto;
-
-            $("abrirMenu").setAttribute(
-                "aria-expanded", String(aberto)
-            );
-
-        });
-
-        $("overlay").addEventListener("click", fecharMenu);
-
-        document.addEventListener("keydown", event => {
-
-            if (event.key === "Escape") {
-                fecharMenu();
-            }
-
-        });
-
-        document.querySelectorAll(".menu a")
-            .forEach(link => {
-
-                link.addEventListener("click", fecharMenu);
-
-            });
-
-        $("sair").addEventListener("click", sair);
-
-        function obterIniciais(nome) {
-
-            const partes = nome.trim().split(/\s+/);
-
-            return (
-                (partes[0]?.[0] || "") +
-                (partes.length > 1
-                    ? partes.at(-1)[0]
-                    : "")
-            ).toUpperCase();
-
-        }
-
-        function mostrarData() {
-
-            $("dataAtual").textContent =
-                new Date().toLocaleDateString(
-                    "pt-BR",
-                    {
-                        weekday: "long",
-                        day: "numeric",
-                        month: "long",
-                        year: "numeric",
-                        timeZone: "America/Sao_Paulo"
-                    }
-                );
-
-        }
 
         async function iniciar() {
 
             try {
 
-                const perfil = await obterPerfil();
+                const perfil = await montarLayout({
+                    titulo: "Portal do usuário",
+                    pagina: "inicio"
+                });
 
-                if (!perfil) {
-
-                    window.location.replace("index.html");
-
-                    return;
-
-                }
+                if (!perfil) return;
 
                 const nome =
                     perfil.nome || "Usuário";
 
-                const primeiroNome =
-                    nome.trim().split(/\s+/)[0];
+                const partes = nome.trim().split(/\s+/);
 
-                const nivel =
-                    permissoes[perfil.perfil] ||
-                    "Usuário comum";
+                const iniciais = (
+                    (partes[0]?.[0] || "") +
+                    (partes.length > 1
+                        ? partes.at(-1)[0]
+                        : "")
+                ).toUpperCase();
 
-                const iniciais =
-                    obterIniciais(nome);
+                const permissoes = {
+                    superadmin: "Administrador principal",
+                    admin: "Administrador",
+                    usuario: "Usuário comum"
+                };
 
-                const administrador =
+                const admin =
                     ["admin", "superadmin"]
                         .includes(perfil.perfil);
 
                 $("saudacao").textContent =
-                    `Bem-vindo, ${primeiroNome}!`;
+                    `Bem-vindo, ${partes[0]}!`;
 
                 $("nome").textContent = nome;
 
-                $("nomeTopo").textContent =
-                    primeiroNome;
-
-                $("nivel").textContent = nivel;
-
-                $("nivelTopo").textContent = nivel;
-
                 $("avatar").textContent = iniciais;
 
-                $("avatarTopo").textContent = iniciais;
+                $("nivel").textContent =
+                    permissoes[perfil.perfil];
+
+                $("nivel").classList.toggle(
+                    "principal",
+                    perfil.perfil === "superadmin"
+                );
 
                 $("rf").textContent = perfil.rf;
 
@@ -999,38 +305,34 @@
                 $("secretaria").textContent =
                     perfil.secretaria || "Não informada";
 
-                if (perfil.perfil === "superadmin") {
+                $("atalhoAdmin").hidden = !admin;
 
-                    $("nivel").classList.add("principal");
+                $("atalhoHistorico").hidden = !admin;
 
-                }
-
-                $("menuAdmin").hidden =
-                    !administrador;
-
-                $("atalhoAdmin").hidden =
-                    !administrador;
-
-                $("atalhoHistorico").hidden =
-                    !administrador;
-
-                const urlCracha =
+                $("atalhoCracha").href =
                     "https://crachadigital.praiagrande.sp.gov.br/?rf=" +
                     encodeURIComponent(perfil.rf);
 
-                $("menuCracha").href = urlCracha;
-
-                $("atalhoCracha").href = urlCracha;
-
-                mostrarData();
-
-                $("carregando").hidden = true;
-
-                $("app").hidden = false;
+                $("dataAtual").textContent =
+                    new Date().toLocaleDateString(
+                        "pt-BR",
+                        {
+                            weekday: "long",
+                            day: "numeric",
+                            month: "long",
+                            year: "numeric",
+                            timeZone: "America/Sao_Paulo"
+                        }
+                    );
 
             } catch {
 
-                window.location.replace("index.html");
+                $("app").hidden = true;
+
+                $("carregando").hidden = false;
+
+                $("carregando").textContent =
+                    "Não foi possível carregar o Dashboard.";
 
             }
 
