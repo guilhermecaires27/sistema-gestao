@@ -10,6 +10,12 @@ const PERMISSOES = {
 
 const ICONES = {
 
+    abonada: `
+    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+    <path d="M14 2v6h6"/>
+    <path d="M8 13h8M8 17h8"/>
+`,
+
     avisos: `
     <path d="m3 11 18-7v16L3 14v-3z"/>
     <path d="m7 15 2 6h4l-2-5"/>
