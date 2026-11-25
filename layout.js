@@ -1,5 +1,6 @@
 
 import { obterPerfil, sair } from "./auth.js";
+import { confirmar } from "./alertas.js";
 
 const PERMISSOES = {
     superadmin: "Administrador principal",
@@ -458,7 +459,23 @@ export async function montarLayout({
 
         });
 
-    $("sgSair").addEventListener("click", sair);
+    $("sgSair").addEventListener("click", async () => {
+
+    const confirmado = await confirmar(
+
+        "Sair do sistema?",
+
+        "Você será redirecionado para a página de login."
+
+    );
+
+    if (confirmado) {
+
+        await sair();
+
+    }
+
+});
 
     const carregando =
         document.getElementById("carregando");
