@@ -2,120 +2,28 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
+
     <meta charset="UTF-8">
+
     <meta name="viewport"
           content="width=device-width, initial-scale=1.0">
 
     <title>Histórico | Sistema de Gestão</title>
 
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="layout.css">
 
     <style>
 
-        body {
-            display: block;
-            padding: 0;
-        }
-
-        [hidden] {
-            display: none !important;
-        }
-
-        .sidebar {
-            position: fixed;
-            inset: 0 auto 0 0;
-            width: 240px;
-            background: #111c2e;
-            border-right: 1px solid var(--border);
-            padding: 24px 18px;
-            display: flex;
-            flex-direction: column;
-        }
-
-        .sidebar h2 {
-            font-size: 20px;
-            margin-bottom: 8px;
-        }
-
-        .sidebar p {
-            color: var(--secondary);
-            font-size: 12px;
-            margin-bottom: 30px;
-        }
-
-        .menu a {
-            display: block;
-            padding: 14px;
-            margin-bottom: 8px;
-            color: white;
-            border-radius: 8px;
-            text-decoration: none;
-        }
-
-        .menu a:hover {
-            background: #334155;
-        }
-
-        .menu .selecionado {
-            background: var(--primary);
-        }
-
-        .sidebar-footer {
-            margin-top: auto;
-        }
-
-        .conteudo {
-            margin-left: 240px;
-            padding: 32px;
-        }
-
-        .cabecalho {
-            margin-bottom: 28px;
-        }
-
-        .cabecalho p {
-            color: var(--secondary);
-            margin-top: 8px;
-        }
-
-        .indicadores {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 16px;
-            margin-bottom: 28px;
-        }
-
-        .indicador {
-            padding: 20px;
-            background: var(--card);
-            border: 1px solid var(--border);
-            border-radius: 12px;
-        }
-
-        .indicador span {
-            font-size: 13px;
-            color: var(--secondary);
-        }
-
-        .indicador strong {
-            display: block;
-            font-size: 30px;
-            margin-top: 12px;
-        }
-
-        .painel {
-            background: var(--card);
-            border: 1px solid var(--border);
-            border-radius: 12px;
-            padding: 24px;
-        }
-
         .painel-header {
             display: flex;
-            justify-content: space-between;
             align-items: center;
+            justify-content: space-between;
             flex-wrap: wrap;
             gap: 12px;
+        }
+
+        .painel-header h2 {
+            margin: 0;
         }
 
         .filtros {
@@ -128,122 +36,41 @@
         .filtros label {
             display: block;
             font-size: 12px;
-            color: var(--secondary);
+            color: var(--layout-secondary);
             margin-bottom: 8px;
         }
 
-        .filtros input,
-        .filtros select {
-            width: 100%;
-            padding: 12px;
-            border: 1px solid var(--border);
-            border-radius: 8px;
-            background: #0f172a;
-            color: white;
-            color-scheme: dark;
-        }
-
-        .btn {
-            border: none;
-            border-radius: 8px;
-            padding: 11px 15px;
-            color: white;
-            background: #2563eb;
-            cursor: pointer;
-        }
-
-        .btn:hover {
-            filter: brightness(1.2);
-        }
-
-        .btn:disabled {
-            opacity: .5;
-            cursor: not-allowed;
-        }
-
-        .vermelho {
-            background: #b91c1c;
-        }
-
-        .verde {
-            background: #15803d;
-        }
-
-        .cinza {
-            background: #475569;
-        }
-
-        .tabela-container {
-            overflow-x: auto;
-        }
-
-        table {
-            width: 100%;
-            min-width: 850px;
-            border-collapse: collapse;
-        }
-
-        th, td {
-            text-align: left;
-            padding: 15px 10px;
+        .info {
             font-size: 13px;
-            border-bottom: 1px solid var(--border);
-        }
-
-        th {
-            color: var(--secondary);
-        }
-
-        tbody tr:hover {
-            background: #243248;
+            color: var(--layout-secondary);
+            margin: 20px 0;
         }
 
         .sucesso {
-            color: #4ade80;
+            color: var(--layout-success);
         }
 
         .falha {
-            color: #f87171;
+            color: var(--layout-danger);
         }
 
-        .info {
-            margin: 18px 0;
+        #mensagem {
             font-size: 13px;
-            color: var(--secondary);
-        }
-
-        #carregando {
-            padding: 40px;
-            text-align: center;
+            margin-top: 18px;
         }
 
         @media (max-width: 1100px) {
 
-            .indicadores,
             .filtros {
                 grid-template-columns: repeat(2, 1fr);
             }
 
         }
 
-        @media (max-width: 700px) {
-
-            .sidebar {
-                position: relative;
-                width: 100%;
-            }
-
-            .conteudo {
-                margin-left: 0;
-                padding: 16px;
-            }
+        @media (max-width: 750px) {
 
             .filtros {
                 grid-template-columns: 1fr;
-            }
-
-            .painel {
-                padding: 16px;
             }
 
         }
@@ -252,244 +79,231 @@
 
 </head>
 
-<body>
+<body class="sg-body">
 
-    <div id="carregando">
+    <div id="carregando" class="sg-carregando">
         Verificando permissões...
     </div>
 
     <div id="app" hidden>
 
-        <aside class="sidebar">
+        <header class="sg-cabecalho">
 
-            <h2>Sistema de Gestão</h2>
+            <h1>Histórico de acessos</h1>
 
-            <p id="administrador"></p>
+            <p>
+                Acompanhe os registros de atividades do sistema.
+            </p>
 
-            <nav class="menu">
+        </header>
 
-                <a href="dashboard.html">
-                    Dashboard
-                </a>
+        <section class="sg-grid">
 
-                <a href="admin.html">
-                    Gerenciar usuários
-                </a>
+            <div class="sg-indicador">
 
-                <a href="historico.html"
-                   class="selecionado">
-                    Histórico de acessos
-                </a>
+                <span>Eventos carregados</span>
 
-            </nav>
-
-            <div class="sidebar-footer">
-
-                <button id="sair"
-                        class="btn vermelho"
-                        style="width:100%">
-                    Sair do sistema
-                </button>
+                <strong id="total">0</strong>
 
             </div>
 
-        </aside>
+            <div class="sg-indicador">
 
-        <main class="conteudo">
+                <span>Logins realizados</span>
 
-            <header class="cabecalho">
+                <strong id="logins"
+                        style="color:#4ade80">0</strong>
 
-                <h1>Histórico de acessos</h1>
+            </div>
 
-                <p>
-                    Acompanhe as atividades do sistema.
-                </p>
+            <div class="sg-indicador">
 
-            </header>
+                <span>Novos cadastros</span>
 
-            <section class="indicadores">
+                <strong id="cadastros"
+                        style="color:#60a5fa">0</strong>
 
-                <div class="indicador">
-                    <span>Total de eventos</span>
-                    <strong id="total">0</strong>
-                </div>
+            </div>
 
-                <div class="indicador">
-                    <span>Logins realizados</span>
-                    <strong id="logins"
-                            style="color:#4ade80">0</strong>
-                </div>
+            <div class="sg-indicador">
 
-                <div class="indicador">
-                    <span>Novos cadastros</span>
-                    <strong id="cadastros"
-                            style="color:#60a5fa">0</strong>
-                </div>
+                <span>Ações administrativas</span>
 
-                <div class="indicador">
-                    <span>Ações administrativas</span>
-                    <strong id="acoes"
-                            style="color:#fbbf24">0</strong>
-                </div>
+                <strong id="acoes"
+                        style="color:#fbbf24">0</strong>
 
-            </section>
+            </div>
 
-            <section class="painel">
+        </section>
 
-                <div class="painel-header">
+        <section class="sg-card">
 
-                    <h2>Registros de atividades</h2>
+            <div class="painel-header">
 
-                    <div>
+                <h2>Registros de atividades</h2>
 
-                        <button id="atualizar"
-                                class="btn cinza">
-                            Atualizar
-                        </button>
+                <div>
 
-                        <button id="exportar"
-                                class="btn verde">
-                            Exportar CSV
-                        </button>
+                    <button
+                        id="atualizar"
+                        class="sg-btn sg-btn-secondary">
 
-                    </div>
+                        Atualizar
+
+                    </button>
+
+                    <button
+                        id="exportar"
+                        class="sg-btn sg-btn-success"
+                        disabled>
+
+                        Exportar CSV
+
+                    </button>
 
                 </div>
 
-                <div class="filtros">
+            </div>
 
-                    <div>
+            <div class="filtros">
 
-                        <label for="pesquisa">
-                            Pesquisar
-                        </label>
+                <div>
 
-                        <input
-                            id="pesquisa"
-                            type="search"
-                            placeholder="Nome ou RF...">
+                    <label for="pesquisa">
+                        Pesquisar
+                    </label>
 
-                    </div>
-
-                    <div>
-
-                        <label for="evento">
-                            Tipo de evento
-                        </label>
-
-                        <select id="evento">
-
-                            <option value="">
-                                Todos
-                            </option>
-
-                            <option value="login">
-                                Login
-                            </option>
-
-                            <option value="cadastro">
-                                Cadastro
-                            </option>
-
-                            <option value="alterar_senha">
-                                Alteração de senha
-                            </option>
-
-                            <option value="redefinir_senha">
-                                Redefinição de senha
-                            </option>
-
-                            <option value="bloquear">
-                                Bloqueio
-                            </option>
-
-                            <option value="desbloquear">
-                                Desbloqueio
-                            </option>
-
-                            <option value="promover">
-                                Promoção de administrador
-                            </option>
-
-                            <option value="rebaixar">
-                                Remoção de administrador
-                            </option>
-
-                            <option value="encerrar_sessoes">
-                                Encerramento de sessões
-                            </option>
-
-                        </select>
-
-                    </div>
-
-                    <div>
-
-                        <label for="inicio">
-                            Data inicial
-                        </label>
-
-                        <input type="date" id="inicio">
-
-                    </div>
-
-                    <div>
-
-                        <label for="fim">
-                            Data final
-                        </label>
-
-                        <input type="date" id="fim">
-
-                    </div>
+                    <input
+                        type="search"
+                        id="pesquisa"
+                        class="sg-input"
+                        placeholder="Nome ou RF...">
 
                 </div>
 
-                <button id="limpar" class="btn cinza">
-                    Limpar filtros
-                </button>
+                <div>
 
-                <p id="quantidade" class="info"></p>
+                    <label for="evento">
+                        Tipo de evento
+                    </label>
 
-                <div class="tabela-container">
+                    <select
+                        id="evento"
+                        class="sg-select">
 
-                    <table>
+                        <option value="">
+                            Todos
+                        </option>
 
-                        <thead>
+                        <option value="login">
+                            Login
+                        </option>
 
-                            <tr>
-                                <th>Data e hora</th>
-                                <th>RF</th>
-                                <th>Nome</th>
-                                <th>Evento</th>
-                                <th>Resultado</th>
-                                <th>Detalhes</th>
-                            </tr>
+                        <option value="cadastro">
+                            Cadastro
+                        </option>
 
-                        </thead>
+                        <option value="alterar_senha">
+                            Alteração de senha
+                        </option>
 
-                        <tbody id="lista"></tbody>
+                        <option value="redefinir_senha">
+                            Redefinição de senha
+                        </option>
 
-                    </table>
+                        <option value="bloquear">
+                            Bloqueio
+                        </option>
+
+                        <option value="desbloquear">
+                            Desbloqueio
+                        </option>
+
+                        <option value="promover">
+                            Promoção de administrador
+                        </option>
+
+                        <option value="rebaixar">
+                            Remoção de administrador
+                        </option>
+
+                        <option value="encerrar_sessoes">
+                            Encerramento de sessões
+                        </option>
+
+                    </select>
 
                 </div>
 
-                <div id="mensagem" role="status"></div>
+                <div>
 
-            </section>
+                    <label for="inicio">
+                        Data inicial
+                    </label>
 
-            <footer>
-                Sistema de Gestão &bull; Versão 1.0
-            </footer>
+                    <input
+                        type="date"
+                        class="sg-input"
+                        id="inicio">
 
-        </main>
+                </div>
+
+                <div>
+
+                    <label for="fim">
+                        Data final
+                    </label>
+
+                    <input
+                        type="date"
+                        class="sg-input"
+                        id="fim">
+
+                </div>
+
+            </div>
+
+            <button
+                id="limpar"
+                class="sg-btn sg-btn-secondary">
+
+                Limpar filtros
+
+            </button>
+
+            <p id="quantidade" class="info"></p>
+
+            <div class="sg-tabela-container">
+
+                <table class="sg-tabela">
+
+                    <thead>
+                        <tr>
+                            <th>Data e hora</th>
+                            <th>RF</th>
+                            <th>Nome</th>
+                            <th>Evento</th>
+                            <th>Resultado</th>
+                            <th>Detalhes</th>
+                        </tr>
+                    </thead>
+
+                    <tbody id="lista"></tbody>
+
+                </table>
+
+            </div>
+
+            <div id="mensagem" role="status"></div>
+
+        </section>
 
     </div>
 
     <script type="module">
 
+        import { montarLayout } from "./layout.js";
         import { supabase } from "./supabase.js";
-        import { obterPerfil, sair } from "./auth.js";
 
         const $ = id => document.getElementById(id);
 
@@ -519,17 +333,19 @@
         };
 
         const acoesAdministrativas = [
+
             "bloquear",
             "desbloquear",
             "redefinir_senha",
             "promover",
             "rebaixar",
             "encerrar_sessoes"
+
         ];
 
-        function normalizar(texto) {
+        function normalizar(valor) {
 
-            return String(texto || "")
+            return String(valor || "")
                 .normalize("NFD")
                 .replace(/[\u0300-\u036f]/g, "")
                 .toLowerCase();
@@ -570,19 +386,23 @@
 
         function atualizarIndicadores() {
 
-            $("total").textContent = registros.length;
+            $("total").textContent =
+                registros.length;
 
-            $("logins").textContent = registros.filter(
-                r => r.evento === "login" && r.sucesso
-            ).length;
+            $("logins").textContent =
+                registros.filter(
+                    r => r.evento === "login" && r.sucesso
+                ).length;
 
-            $("cadastros").textContent = registros.filter(
-                r => r.evento === "cadastro" && r.sucesso
-            ).length;
+            $("cadastros").textContent =
+                registros.filter(
+                    r => r.evento === "cadastro" && r.sucesso
+                ).length;
 
-            $("acoes").textContent = registros.filter(
-                r => acoesAdministrativas.includes(r.evento)
-            ).length;
+            $("acoes").textContent =
+                registros.filter(
+                    r => acoesAdministrativas.includes(r.evento)
+                ).length;
 
         }
 
@@ -592,9 +412,7 @@
 
             td.textContent = valor ?? "-";
 
-            if (classe) {
-                td.className = classe;
-            }
+            td.className = classe;
 
             linha.appendChild(td);
 
@@ -607,24 +425,24 @@
             );
 
             const evento = $("evento").value;
+
             const inicio = $("inicio").value;
+
             const fim = $("fim").value;
 
             filtrados = registros.filter(r => {
 
-                const corresponde =
-                    normalizar(r.nome).includes(pesquisa) ||
-                    normalizar(r.rf).includes(pesquisa);
-
-                const eventoValido =
-                    !evento || r.evento === evento;
-
                 const data = dataLocal(r.criado_em);
 
-                return corresponde &&
-                    eventoValido &&
+                return (
+                    (
+                        normalizar(r.nome).includes(pesquisa) ||
+                        normalizar(r.rf).includes(pesquisa)
+                    ) &&
+                    (!evento || r.evento === evento) &&
                     (!inicio || data >= inicio) &&
-                    (!fim || data <= fim);
+                    (!fim || data <= fim)
+                );
 
             });
 
@@ -632,7 +450,8 @@
 
             for (const r of filtrados) {
 
-                const linha = document.createElement("tr");
+                const linha =
+                    document.createElement("tr");
 
                 adicionarCelula(
                     linha,
@@ -669,13 +488,16 @@
 
             if (!filtrados.length) {
 
-                const linha = document.createElement("tr");
+                const linha =
+                    document.createElement("tr");
 
-                const td = document.createElement("td");
+                const td =
+                    document.createElement("td");
 
                 td.colSpan = 6;
 
-                td.textContent = "Nenhum registro encontrado.";
+                td.textContent =
+                    "Nenhum registro encontrado.";
 
                 td.style.textAlign = "center";
 
@@ -691,6 +513,10 @@
 
             $("atualizar").disabled = true;
 
+            $("exportar").disabled = true;
+
+            $("mensagem").className = "";
+
             $("mensagem").textContent =
                 "Carregando histórico...";
 
@@ -699,11 +525,10 @@
                 const { data, error } =
                     await supabase.rpc("consultar_historico");
 
-                if (error) {
-                    throw error;
-                }
+                if (error) throw error;
 
-                registros = Array.isArray(data) ? data : [];
+                registros =
+                    Array.isArray(data) ? data : [];
 
                 atualizarIndicadores();
 
@@ -719,7 +544,7 @@
 
                 renderizar();
 
-                $("mensagem").className = "erro";
+                $("mensagem").className = "falha";
 
                 $("mensagem").textContent =
                     "Não foi possível consultar o histórico.";
@@ -736,22 +561,24 @@
 
             if (!filtrados.length) return;
 
-            const escapar = valor => {
+            function escapar(valor) {
 
                 let texto = String(valor ?? "");
 
-                // Evitar fórmulas involuntárias no Excel
+                if (
+                    /^[\s]*[=+\-@]/.test(texto) ||
+                    /^[\t\r\n]/.test(texto)
+                ) {
 
-                if (/^[\s]*[=+\-@]/.test(texto) ||
-                    /^[\t\r\n]/.test(texto)) {
                     texto = "'" + texto;
+
                 }
 
                 return '"' +
                     texto.replace(/"/g, '""') +
                     '"';
 
-            };
+            }
 
             const linhas = [
 
@@ -815,7 +642,9 @@
 
         }
 
-        $("pesquisa").addEventListener("input", renderizar);
+        $("pesquisa").addEventListener(
+            "input", renderizar
+        );
 
         ["evento", "inicio", "fim"].forEach(id => {
 
@@ -842,47 +671,32 @@
             "click", exportarCSV
         );
 
-        $("sair").addEventListener("click", sair);
-
         async function iniciar() {
 
             try {
 
-                const perfil = await obterPerfil();
+                const perfil = await montarLayout({
 
-                if (!perfil) {
+                    titulo: "Histórico de acessos",
 
-                    window.location.replace("index.html");
+                    pagina: "historico",
 
-                    return;
+                    somenteAdmin: true
 
-                }
+                });
 
-                if (
-                    !["admin", "superadmin"]
-                        .includes(perfil.perfil)
-                ) {
-
-                    window.location.replace("dashboard.html");
-
-                    return;
-
-                }
-
-                $("administrador").textContent =
-                    perfil.perfil === "superadmin"
-                        ? "Administrador principal"
-                        : "Administrador";
-
-                $("carregando").hidden = true;
-
-                $("app").hidden = false;
+                if (!perfil) return;
 
                 await carregarHistorico();
 
             } catch {
 
-                window.location.replace("index.html");
+                $("app").hidden = true;
+
+                $("carregando").hidden = false;
+
+                $("carregando").textContent =
+                    "Erro ao carregar o histórico.";
 
             }
 
