@@ -317,6 +317,13 @@ export async function montarLayout({
     const menuPrincipal = [
 
         {
+            texto: "Mural de avisos",
+            href: "avisos.html",
+            simbolo: "avisos",
+            pagina: "avisos"
+        },
+
+        {
             texto: "Início",
             href: "dashboard.html",
             simbolo: "inicio",
