@@ -10,6 +10,8 @@
 
     <title>Avisos | Sistema de Gestão</title>
 
+    <link rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/sweetalert2@11.26.25/dist/sweetalert2.min.css">
     <link rel="stylesheet" href="layout.css">
 
     <style>
@@ -359,6 +361,11 @@
 
         import { supabase } from "./supabase.js";
 
+        import {
+    confirmar,
+    notificacao
+} from "./alertas.js";
+
         const $ = id => document.getElementById(id);
 
         let administrador = false;
@@ -377,12 +384,12 @@
 
         };
 
-        function mensagem(texto, erro = false) {
+            function mensagem(texto, erro = false) {
 
-            $("mensagem").textContent = texto;
-
-            $("mensagem").className =
-                erro ? "erro" : "sucesso";
+            notificacao(
+            texto,
+            erro ? "error" : "success"
+            );
 
         }
 
@@ -882,10 +889,17 @@
 
             if (!administrador || processando) return;
 
-            if (!confirm(
-                "Deseja excluir este comunicado?\n\n" +
-                aviso.titulo
-            )) return;
+            const confirmado = await confirmar(
+
+    "Excluir comunicado?",
+
+    aviso.titulo,
+
+    true
+
+);
+
+if (!confirmado || processando) return;
 
             processando = true;
 
