@@ -233,23 +233,136 @@
 
         <section class="sg-card">
 
-            <h2>Avisos do sistema</h2>
+    <h2>Avisos do sistema</h2>
 
-            <p style="color:var(--layout-secondary)">
-                Nenhum aviso disponível no momento.
-            </p>
+    <div id="avisosDashboard">
+        Carregando avisos...
+    </div>
 
-        </section>
+    <a href="avisos.html"
+       class="sg-btn"
+       style="margin-top:18px">
+
+        Ver todos os comunicados
+
+    </a>
+
+</section>
 
     </div>
 
     <script type="module">
 
         import { montarLayout } from "./layout.js";
+        import { supabase } from "./supabase.js";
 
         const $ = id => document.getElementById(id);
 
         async function iniciar() {
+
+            
+async function carregarAvisosDashboard() {
+
+    const lista =
+        document.getElementById("avisosDashboard");
+
+    const { data, error } = await supabase
+        .from("avisos")
+        .select("id,titulo,mensagem,prioridade,fixado,criado_em")
+        .eq("ativo", true)
+        .or(
+            "expira_em.is.null,expira_em.gt." +
+            new Date().toISOString()
+        )
+        .order("fixado", {
+            ascending: false
+        })
+        .order("criado_em", {
+            ascending: false
+        })
+        .limit(3);
+
+    lista.replaceChildren();
+
+    if (error) {
+
+        lista.textContent =
+            "Não foi possível carregar os avisos.";
+
+        return;
+
+    }
+
+    if (!data?.length) {
+
+        lista.textContent =
+            "Nenhum aviso disponível no momento.";
+
+        lista.style.color =
+            "var(--layout-secondary)";
+
+        return;
+
+    }
+
+    const cores = {
+
+        normal: "#60a5fa",
+
+        importante: "#fbbf24",
+
+        urgente: "#f87171"
+
+    };
+
+    for (const aviso of data) {
+
+        const card = document.createElement("div");
+
+        card.style.cssText = `
+            background: var(--layout-bg);
+            border: 1px solid var(--layout-border);
+            border-left: 4px solid ${cores[aviso.prioridade]};
+            border-radius: 8px;
+            padding: 18px;
+            margin-bottom: 12px;
+        `;
+
+        const titulo = document.createElement("h3");
+
+        titulo.textContent =
+            (aviso.fixado ? "📌 " : "") +
+            aviso.titulo;
+
+        titulo.style.margin = "0 0 12px";
+
+        titulo.style.overflowWrap = "anywhere";
+
+        const texto = document.createElement("p");
+
+        texto.textContent =
+            aviso.mensagem.length > 250
+                ? aviso.mensagem.slice(0, 250) + "..."
+                : aviso.mensagem;
+
+        texto.style.cssText = `
+            color: var(--layout-secondary);
+            line-height: 1.6;
+            font-size: 14px;
+            white-space: pre-wrap;
+            overflow-wrap: anywhere;
+        `;
+
+        card.appendChild(titulo);
+
+        card.appendChild(texto);
+
+        lista.appendChild(card);
+
+    }
+
+}
+
 
             try {
 
@@ -259,6 +372,7 @@
                 });
 
                 if (!perfil) return;
+                await carregarAvisosDashboard();
 
                 const nome =
                     perfil.nome || "Usuário";
