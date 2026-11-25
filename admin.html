@@ -2,150 +2,16 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-
     <meta charset="UTF-8">
+
     <meta name="viewport"
           content="width=device-width, initial-scale=1.0">
 
-    <title>Painel Administrativo | Sistema de Gestão</title>
+    <title>Usuários | Sistema de Gestão</title>
 
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="layout.css">
 
     <style>
-
-        body {
-            display: block;
-            padding: 0;
-        }
-
-        [hidden] {
-            display: none !important;
-        }
-
-        .sidebar {
-            position: fixed;
-            inset: 0 auto 0 0;
-            width: 240px;
-            background: #111c2e;
-            border-right: 1px solid var(--border);
-            padding: 24px 18px;
-            display: flex;
-            flex-direction: column;
-        }
-
-        .sidebar h2 {
-            font-size: 20px;
-            margin-bottom: 8px;
-        }
-
-        .sidebar p {
-            color: var(--secondary);
-            font-size: 12px;
-            margin-bottom: 30px;
-        }
-
-        .menu a {
-            display: block;
-            padding: 14px;
-            margin-bottom: 8px;
-            color: white;
-            border-radius: 8px;
-            text-decoration: none;
-        }
-
-        .menu a:hover {
-            background: #334155;
-        }
-
-        .menu .selecionado {
-            background: var(--primary);
-        }
-
-        .sidebar-footer {
-            margin-top: auto;
-        }
-
-        .conteudo {
-            margin-left: 240px;
-            padding: 32px;
-        }
-
-        .cabecalho {
-            margin-bottom: 28px;
-        }
-
-        .cabecalho p {
-            color: var(--secondary);
-            margin-top: 8px;
-        }
-
-        .indicadores {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 16px;
-            margin-bottom: 28px;
-        }
-
-        .indicador {
-            background: var(--card);
-            border: 1px solid var(--border);
-            border-radius: 12px;
-            padding: 20px;
-        }
-
-        .indicador span {
-            color: var(--secondary);
-            font-size: 13px;
-        }
-
-        .indicador strong {
-            display: block;
-            font-size: 30px;
-            margin-top: 12px;
-        }
-
-        .painel {
-            background: var(--card);
-            border: 1px solid var(--border);
-            border-radius: 12px;
-            padding: 22px;
-        }
-
-        .pesquisa {
-            width: 100%;
-            padding: 14px;
-            margin: 20px 0;
-            border: 1px solid var(--border);
-            border-radius: 8px;
-            background: #0f172a;
-            color: white;
-        }
-
-        .tabela-container {
-            overflow-x: auto;
-        }
-
-        table {
-            width: 100%;
-            min-width: 950px;
-            border-collapse: collapse;
-        }
-
-        th, td {
-            padding: 14px 10px;
-            text-align: left;
-            border-bottom: 1px solid var(--border);
-            font-size: 13px;
-        }
-
-        th {
-            color: var(--secondary);
-        }
-
-        tbody tr:hover {
-            background: #243248;
-        }
-
         .acoes {
             display: flex;
             flex-wrap: wrap;
@@ -153,245 +19,133 @@
             min-width: 180px;
         }
 
-        .btn {
-            border: none;
-            border-radius: 6px;
-            padding: 8px 11px;
-            color: white;
-            font-size: 12px;
-            cursor: pointer;
-        }
-
-        .btn:hover {
-            filter: brightness(1.2);
-        }
-
-        .btn:disabled {
-            opacity: .5;
-            cursor: not-allowed;
-        }
-
-        .azul {
-            background: #2563eb;
-        }
-
-        .vermelho {
-            background: #b91c1c;
-        }
-
-        .verde {
-            background: #15803d;
-        }
-
-        .amarelo {
-            background: #92400e;
-        }
-
-        .cinza {
-            background: #475569;
-        }
-
-        .status {
-            display: inline-block;
-            padding: 5px 8px;
-            border-radius: 6px;
+        .acoes .sg-btn {
             font-size: 11px;
+            padding: 8px 10px;
         }
 
-        .ativo {
-            color: #4ade80;
-            background: #14532d55;
-        }
-
-        .bloqueado {
-            color: #f87171;
-            background: #7f1d1d55;
-        }
-
-        .pendente {
-            color: #fbbf24;
-            background: #78350f55;
-        }
-
-        #carregando {
-            padding: 40px;
-            text-align: center;
+        .pesquisa {
+            margin-bottom: 22px;
         }
 
         .protegido {
-            color: #fbbf24;
+            color: var(--layout-warning);
             font-size: 12px;
         }
 
-        @media (max-width: 1050px) {
-
-            .indicadores {
-                grid-template-columns: repeat(2, 1fr);
-            }
-
+        .sg-tabela {
+            min-width: 1000px;
         }
 
-        @media (max-width: 700px) {
-
-            .sidebar {
-                position: relative;
-                width: 100%;
-            }
-
-            .conteudo {
-                margin-left: 0;
-                padding: 16px;
-            }
-
-            .painel {
-                padding: 15px;
-            }
-
+        #mensagem {
+            margin-top: 18px;
+            font-size: 14px;
         }
 
+        .sucesso {
+            color: var(--layout-success);
+        }
+
+        .erro {
+            color: var(--layout-danger);
+        }
     </style>
-
 </head>
 
-<body>
+<body class="sg-body">
 
-    <div id="carregando">
+    <div id="carregando" class="sg-carregando">
         Verificando permissões administrativas...
     </div>
 
     <div id="app" hidden>
 
-        <aside class="sidebar">
+        <header class="sg-cabecalho">
 
-            <h2>Sistema de Gestão</h2>
+            <h1>Gerenciamento de usuários</h1>
 
-            <p id="administrador"></p>
+            <p>
+                Controle de contas, acessos e permissões.
+            </p>
 
-            <nav class="menu">
+        </header>
 
-                <a href="dashboard.html">
-                    Dashboard
-                </a>
+        <section class="sg-grid">
 
-                <a href="admin.html" class="selecionado">
-                    Gerenciar usuários
-                </a>
-                    <a href="historico.html">
-                    Histórico de acessos
-                </a>
-            </nav>
+            <div class="sg-indicador">
+                <span>Total de usuários</span>
+                <strong id="total">0</strong>
+            </div>
 
-            <div class="sidebar-footer">
+            <div class="sg-indicador">
+                <span>Administradores</span>
+                <strong id="admins"
+                        style="color:#60a5fa">0</strong>
+            </div>
 
-                <button
-                    id="sair"
-                    class="btn vermelho"
-                    style="width:100%;padding:13px">
+            <div class="sg-indicador">
+                <span>Bloqueados</span>
+                <strong id="bloqueados"
+                        style="color:#f87171">0</strong>
+            </div>
 
-                    Sair do sistema
+            <div class="sg-indicador">
+                <span>Primeiro acesso</span>
+                <strong id="pendentes"
+                        style="color:#fbbf24">0</strong>
+            </div>
 
-                </button>
+        </section>
+
+        <section class="sg-card">
+
+            <h2>Usuários cadastrados</h2>
+
+            <input
+                type="search"
+                id="pesquisa"
+                class="sg-input pesquisa"
+                placeholder="Pesquisar por nome, RF, cargo ou secretaria...">
+
+            <div class="sg-tabela-container">
+
+                <table class="sg-tabela">
+
+                    <thead>
+                        <tr>
+                            <th>RF</th>
+                            <th>Nome</th>
+                            <th>Cargo</th>
+                            <th>Secretaria</th>
+                            <th>Permissão</th>
+                            <th>Status</th>
+                            <th>Último acesso</th>
+                            <th>Ações</th>
+                        </tr>
+                    </thead>
+
+                    <tbody id="lista"></tbody>
+
+                </table>
 
             </div>
 
-        </aside>
+            <div id="mensagem" role="status"></div>
 
-        <main class="conteudo">
-
-            <header class="cabecalho">
-
-                <h1>Painel administrativo</h1>
-
-                <p>
-                    Gerenciamento de usuários e permissões.
-                </p>
-
-            </header>
-
-            <section class="indicadores">
-
-                <div class="indicador">
-                    <span>Total de usuários</span>
-                    <strong id="total">0</strong>
-                </div>
-
-                <div class="indicador">
-                    <span>Administradores</span>
-                    <strong id="admins"
-                            style="color:#60a5fa">0</strong>
-                </div>
-
-                <div class="indicador">
-                    <span>Bloqueados</span>
-                    <strong id="bloqueados"
-                            style="color:#f87171">0</strong>
-                </div>
-
-                <div class="indicador">
-                    <span>Primeiro acesso</span>
-                    <strong id="pendentes"
-                            style="color:#fbbf24">0</strong>
-                </div>
-
-            </section>
-
-            <section class="painel">
-
-                <h2>Usuários cadastrados</h2>
-
-                <input
-                    type="search"
-                    id="pesquisa"
-                    class="pesquisa"
-                    placeholder="Pesquisar por nome, RF ou secretaria...">
-
-                <div class="tabela-container">
-
-                    <table>
-
-                        <thead>
-
-                            <tr>
-                                <th>RF</th>
-                                <th>Nome</th>
-                                <th>Cargo</th>
-                                <th>Secretaria</th>
-                                <th>Permissão</th>
-                                <th>Status</th>
-                                <th>Último acesso</th>
-                                <th>Ações</th>
-                            </tr>
-
-                        </thead>
-
-                        <tbody id="lista"></tbody>
-
-                    </table>
-
-                </div>
-
-                <div id="mensagem" role="status"></div>
-
-            </section>
-
-            <footer>
-                Sistema de Gestão &bull; Versão 1.0
-            </footer>
-
-        </main>
+        </section>
 
     </div>
 
     <script type="module">
 
+        import { montarLayout } from "./layout.js";
         import { supabase } from "./supabase.js";
-        import { obterPerfil, sair } from "./auth.js";
+
+        const $ = id => document.getElementById(id);
 
         let usuarios = [];
         let operador = null;
         let processando = false;
-
-        const $ = id => document.getElementById(id);
 
         const permissoes = {
             superadmin: "Administrador principal",
@@ -418,11 +172,13 @@
 
             if (error) {
 
-                let texto = "Não foi possível concluir a operação.";
+                let texto =
+                    "Não foi possível concluir a operação.";
 
                 try {
 
-                    const resposta = await error.context.json();
+                    const resposta =
+                        await error.context.json();
 
                     texto = resposta.mensagem || texto;
 
@@ -448,7 +204,7 @@
 
             const td = document.createElement("td");
 
-            td.textContent = texto ?? "-";
+            td.textContent = texto || "-";
 
             linha.appendChild(td);
 
@@ -460,7 +216,7 @@
 
             const botao = document.createElement("button");
 
-            botao.className = `btn ${cor}`;
+            botao.className = `sg-btn sg-btn-${cor}`;
 
             botao.textContent = texto;
 
@@ -483,8 +239,8 @@
             div.className = "acoes";
 
             const protegido =
-                usuario.perfil === "superadmin" ||
                 usuario.rf === "51112" ||
+                usuario.perfil === "superadmin" ||
                 usuario.id === operador.id ||
                 (
                     operador.perfil === "admin" &&
@@ -493,7 +249,8 @@
 
             if (protegido) {
 
-                const texto = document.createElement("span");
+                const texto =
+                    document.createElement("span");
 
                 texto.className = "protegido";
 
@@ -507,9 +264,18 @@
 
             div.appendChild(
                 criarBotao(
-                    usuario.ativo ? "Bloquear" : "Desbloquear",
-                    usuario.ativo ? "vermelho" : "verde",
-                    usuario.ativo ? "bloquear" : "desbloquear",
+                    usuario.ativo
+                        ? "Bloquear"
+                        : "Desbloquear",
+
+                    usuario.ativo
+                        ? "danger"
+                        : "success",
+
+                    usuario.ativo
+                        ? "bloquear"
+                        : "desbloquear",
+
                     usuario
                 )
             );
@@ -517,7 +283,7 @@
             div.appendChild(
                 criarBotao(
                     "Redefinir senha",
-                    "amarelo",
+                    "warning",
                     "redefinir_senha",
                     usuario
                 )
@@ -526,7 +292,7 @@
             div.appendChild(
                 criarBotao(
                     "Encerrar sessões",
-                    "cinza",
+                    "secondary",
                     "encerrar_sessoes",
                     usuario
                 )
@@ -540,7 +306,7 @@
                             ? "Remover admin"
                             : "Tornar admin",
 
-                        "azul",
+                        "primary",
 
                         usuario.perfil === "admin"
                             ? "rebaixar"
@@ -556,10 +322,20 @@
 
         }
 
+        function normalizar(valor) {
+
+            return String(valor || "")
+                .normalize("NFD")
+                .replace(/[\u0300-\u036f]/g, "")
+                .toLowerCase();
+
+        }
+
         function renderizar() {
 
-            const termo = $("pesquisa")
-                .value.toLowerCase().trim();
+            const termo = normalizar(
+                $("pesquisa").value.trim()
+            );
 
             $("lista").replaceChildren();
 
@@ -571,18 +347,15 @@
                     u.cargo,
                     u.secretaria
                 ].some(valor =>
-
-                    String(valor || "")
-                        .toLowerCase()
-                        .includes(termo)
-
+                    normalizar(valor).includes(termo)
                 )
 
             );
 
             for (const u of filtrados) {
 
-                const linha = document.createElement("tr");
+                const linha =
+                    document.createElement("tr");
 
                 adicionarCelula(linha, u.rf);
 
@@ -597,29 +370,37 @@
                     permissoes[u.perfil] || "Usuário"
                 );
 
-                const tdStatus = document.createElement("td");
+                const tdStatus =
+                    document.createElement("td");
 
-                const status = document.createElement("span");
+                const status =
+                    document.createElement("span");
 
-                status.className = "status";
+                status.className = "sg-status";
 
                 if (!u.ativo) {
 
                     status.textContent = "Bloqueado";
 
-                    status.classList.add("bloqueado");
+                    status.classList.add(
+                        "sg-status-bloqueado"
+                    );
 
                 } else if (u.primeiro_acesso) {
 
                     status.textContent = "Alterar senha";
 
-                    status.classList.add("pendente");
+                    status.classList.add(
+                        "sg-status-pendente"
+                    );
 
                 } else {
 
                     status.textContent = "Ativo";
 
-                    status.classList.add("ativo");
+                    status.classList.add(
+                        "sg-status-ativo"
+                    );
 
                 }
 
@@ -631,11 +412,18 @@
                     linha,
                     u.ultimo_acesso
                         ? new Date(u.ultimo_acesso)
-                            .toLocaleString("pt-BR")
+                            .toLocaleString(
+                                "pt-BR",
+                                {
+                                    timeZone:
+                                        "America/Sao_Paulo"
+                                }
+                            )
                         : "Nunca"
                 );
 
-                const tdAcoes = document.createElement("td");
+                const tdAcoes =
+                    document.createElement("td");
 
                 tdAcoes.appendChild(criarAcoes(u));
 
@@ -645,23 +433,49 @@
 
             }
 
+            if (!filtrados.length) {
+
+                const linha =
+                    document.createElement("tr");
+
+                const td =
+                    document.createElement("td");
+
+                td.colSpan = 8;
+
+                td.textContent =
+                    "Nenhum usuário encontrado.";
+
+                td.style.textAlign = "center";
+
+                linha.appendChild(td);
+
+                $("lista").appendChild(linha);
+
+            }
+
         }
 
         function atualizarIndicadores() {
 
-            $("total").textContent = usuarios.length;
+            $("total").textContent =
+                usuarios.length;
 
-            $("admins").textContent = usuarios.filter(
-                u => ["admin", "superadmin"].includes(u.perfil)
-            ).length;
+            $("admins").textContent =
+                usuarios.filter(
+                    u => ["admin", "superadmin"]
+                        .includes(u.perfil)
+                ).length;
 
-            $("bloqueados").textContent = usuarios.filter(
-                u => !u.ativo
-            ).length;
+            $("bloqueados").textContent =
+                usuarios.filter(
+                    u => !u.ativo
+                ).length;
 
-            $("pendentes").textContent = usuarios.filter(
-                u => u.primeiro_acesso
-            ).length;
+            $("pendentes").textContent =
+                usuarios.filter(
+                    u => u.primeiro_acesso
+                ).length;
 
         }
 
@@ -685,24 +499,31 @@
             if (processando) return;
 
             const descricoes = {
+
                 bloquear: "Bloquear usuário",
+
                 desbloquear: "Desbloquear usuário",
+
                 redefinir_senha: "Redefinir senha",
+
                 promover: "Promover a administrador",
-                rebaixar: "Remover privilégios administrativos",
+
+                rebaixar: "Remover administrador",
+
                 encerrar_sessoes: "Encerrar sessões"
+
             };
 
-            const confirmar = confirm(
+            if (!confirm(
                 `${descricoes[acao]}?\n\n` +
                 `${usuario.nome}\nRF: ${usuario.rf}`
-            );
-
-            if (!confirmar) return;
+            )) return;
 
             processando = true;
 
             renderizar();
+
+            mensagem("Processando operação...");
 
             try {
 
@@ -710,7 +531,7 @@
                     "admin-acoes",
                     {
                         rf: usuario.rf,
-                        acao: acao
+                        acao
                     }
                 );
 
@@ -720,21 +541,33 @@
                         "Senha temporária:\n\n" +
                         resultado.senha_temporaria +
                         "\n\nEntregue a senha ao funcionário." +
-                        "\nEle deverá alterá-la no próximo acesso."
+                        "\nA alteração será obrigatória."
                     );
 
                 }
-
-                await carregarUsuarios();
 
                 mensagem(
                     resultado.mensagem +
                     (
                         resultado.historico_registrado === false
-                            ? " Atenção: histórico não registrado."
+                            ? " Histórico não registrado."
                             : ""
                     )
                 );
+
+                try {
+
+                    await carregarUsuarios();
+
+                } catch {
+
+                    mensagem(
+                        resultado.mensagem +
+                        " Atualize a página para consultar os dados.",
+                        true
+                    );
+
+                }
 
             } catch (erro) {
 
@@ -754,46 +587,32 @@
             "input", renderizar
         );
 
-        $("sair").addEventListener("click", sair);
-
         async function iniciar() {
 
             try {
 
-                operador = await obterPerfil();
+                operador = await montarLayout({
 
-                if (!operador) {
+                    titulo: "Administração",
 
-                    window.location.replace("index.html");
+                    pagina: "usuarios",
 
-                    return;
+                    somenteAdmin: true
 
-                }
+                });
 
-                if (
-                    !["admin", "superadmin"]
-                        .includes(operador.perfil)
-                ) {
-
-                    window.location.replace("dashboard.html");
-
-                    return;
-
-                }
-
-                $("administrador").textContent =
-                    permissoes[operador.perfil];
+                if (!operador) return;
 
                 await carregarUsuarios();
 
-                $("carregando").hidden = true;
-
-                $("app").hidden = false;
-
             } catch (erro) {
 
+                $("app").hidden = true;
+
+                $("carregando").hidden = false;
+
                 $("carregando").textContent =
-                    "Não foi possível carregar o painel: " +
+                    "Erro ao carregar usuários: " +
                     erro.message;
 
             }
