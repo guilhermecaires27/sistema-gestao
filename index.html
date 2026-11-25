@@ -1,0 +1,128 @@
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login | Sistema de Gestão</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <main class="login-container">
+
+        <div class="login-header">
+            <div class="logo">
+                <svg width="36" height="36" viewBox="0 0 24 24"
+                     fill="none" stroke="currentColor" stroke-width="1.8">
+                    <path d="M12 22s8-4 8-11V5l-8-3-8 3v6c0 7 8 11 8 11z"/>
+                    <path d="m9 12 2 2 4-4"/>
+                </svg>
+            </div>
+
+            <h1>Sistema de Gestão</h1>
+            <p>Área de acesso restrito</p>
+        </div>
+
+        <section class="login-card">
+
+            <h2>Bem-vindo</h2>
+            <p class="subtitle">Insira suas credenciais para continuar.</p>
+
+            <form id="loginForm">
+
+                <div class="form-group">
+                    <label for="rf">Registro Funcional (RF)</label>
+                    <input
+                        type="text"
+                        id="rf"
+                        name="rf"
+                        placeholder="Digite seu RF"
+                        inputmode="numeric"
+                        pattern="[0-9]+"
+                        autocomplete="username"
+                        required>
+                </div>
+
+                <div class="form-group">
+                    <label for="senha">Senha</label>
+
+                    <div class="password-container">
+                        <input
+                            type="password"
+                            id="senha"
+                            name="senha"
+                            placeholder="Digite sua senha"
+                            minlength="8"
+                            autocomplete="current-password"
+                            required>
+
+                        <button
+                            type="button"
+                            id="togglePassword"
+                            class="toggle-password">
+                            Mostrar
+                        </button>
+                    </div>
+                </div>
+
+                <div class="form-options">
+                    <a href="#" id="forgotPassword">
+                        Esqueci minha senha
+                    </a>
+                </div>
+
+                <button type="submit" class="btn-login">
+                    Entrar no sistema
+                </button>
+
+                <div id="mensagem" role="status"></div>
+
+            </form>
+
+            <div class="divider"></div>
+
+            <div class="register">
+                Não possui cadastro?
+                <a href="cadastro.html">Criar conta</a>
+            </div>
+
+        </section>
+
+        <footer>
+            Sistema de Gestão &bull; Versão 1.0
+        </footer>
+
+    </main>
+
+    <script>
+        const senha = document.getElementById("senha");
+        const toggle = document.getElementById("togglePassword");
+        const mensagem = document.getElementById("mensagem");
+
+        toggle.addEventListener("click", function () {
+            const mostrar = senha.type === "password";
+
+            senha.type = mostrar ? "text" : "password";
+            toggle.textContent = mostrar ? "Ocultar" : "Mostrar";
+        });
+
+        document.getElementById("loginForm")
+            .addEventListener("submit", function (event) {
+                event.preventDefault();
+
+                mensagem.textContent =
+                    "O sistema de autenticação ainda não foi configurado.";
+            });
+
+        document.getElementById("forgotPassword")
+            .addEventListener("click", function (event) {
+                event.preventDefault();
+
+                mensagem.textContent =
+                    "A recuperação de senha será disponibilizada em breve.";
+            });
+    </script>
+
+</body>
+</html>
