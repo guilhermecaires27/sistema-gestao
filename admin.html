@@ -24,13 +24,11 @@
 
         .sidebar {
             position: fixed;
-            top: 0;
-            left: 0;
-            bottom: 0;
+            inset: 0 auto 0 0;
             width: 240px;
             background: #111c2e;
             border-right: 1px solid var(--border);
-            padding: 25px 18px;
+            padding: 24px 18px;
             display: flex;
             flex-direction: column;
         }
@@ -43,27 +41,20 @@
         .sidebar p {
             color: var(--secondary);
             font-size: 12px;
-            margin-bottom: 35px;
+            margin-bottom: 30px;
         }
 
-        .menu a,
-        .menu button {
+        .menu a {
             display: block;
-            width: 100%;
             padding: 14px;
             margin-bottom: 8px;
-            color: var(--text);
-            text-decoration: none;
+            color: white;
             border-radius: 8px;
-            background: transparent;
-            border: none;
-            text-align: left;
-            cursor: pointer;
-            font-size: 14px;
+            text-decoration: none;
         }
 
         .menu a:hover {
-            background: #1e293b;
+            background: #334155;
         }
 
         .menu .selecionado {
@@ -72,16 +63,6 @@
 
         .sidebar-footer {
             margin-top: auto;
-        }
-
-        .sidebar-footer button {
-            width: 100%;
-            background: #dc2626;
-            color: white;
-            padding: 12px;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
         }
 
         .conteudo {
@@ -93,14 +74,9 @@
             margin-bottom: 28px;
         }
 
-        .cabecalho h1 {
-            font-size: 27px;
-            margin-bottom: 8px;
-        }
-
         .cabecalho p {
             color: var(--secondary);
-            font-size: 14px;
+            margin-top: 8px;
         }
 
         .indicadores {
@@ -111,10 +87,10 @@
         }
 
         .indicador {
-            padding: 22px;
             background: var(--card);
             border: 1px solid var(--border);
             border-radius: 12px;
+            padding: 20px;
         }
 
         .indicador span {
@@ -124,35 +100,25 @@
 
         .indicador strong {
             display: block;
+            font-size: 30px;
             margin-top: 12px;
-            font-size: 32px;
         }
 
         .painel {
             background: var(--card);
             border: 1px solid var(--border);
             border-radius: 12px;
-            padding: 24px;
-        }
-
-        .painel h2 {
-            font-size: 20px;
-            margin-bottom: 20px;
+            padding: 22px;
         }
 
         .pesquisa {
             width: 100%;
             padding: 14px;
-            background: #0f172a;
-            color: white;
+            margin: 20px 0;
             border: 1px solid var(--border);
             border-radius: 8px;
-            margin-bottom: 24px;
-            outline: none;
-        }
-
-        .pesquisa:focus {
-            border-color: #60a5fa;
+            background: #0f172a;
+            color: white;
         }
 
         .tabela-container {
@@ -161,32 +127,75 @@
 
         table {
             width: 100%;
+            min-width: 950px;
             border-collapse: collapse;
-            min-width: 800px;
         }
 
         th, td {
+            padding: 14px 10px;
             text-align: left;
-            padding: 15px 10px;
             border-bottom: 1px solid var(--border);
             font-size: 13px;
         }
 
         th {
             color: var(--secondary);
-            font-weight: 600;
         }
 
         tbody tr:hover {
             background: #243248;
         }
 
+        .acoes {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            min-width: 180px;
+        }
+
+        .btn {
+            border: none;
+            border-radius: 6px;
+            padding: 8px 11px;
+            color: white;
+            font-size: 12px;
+            cursor: pointer;
+        }
+
+        .btn:hover {
+            filter: brightness(1.2);
+        }
+
+        .btn:disabled {
+            opacity: .5;
+            cursor: not-allowed;
+        }
+
+        .azul {
+            background: #2563eb;
+        }
+
+        .vermelho {
+            background: #b91c1c;
+        }
+
+        .verde {
+            background: #15803d;
+        }
+
+        .amarelo {
+            background: #92400e;
+        }
+
+        .cinza {
+            background: #475569;
+        }
+
         .status {
             display: inline-block;
-            padding: 5px 9px;
+            padding: 5px 8px;
             border-radius: 6px;
             font-size: 11px;
-            white-space: nowrap;
         }
 
         .ativo {
@@ -199,23 +208,19 @@
             background: #7f1d1d55;
         }
 
-        .primeiro-acesso {
+        .pendente {
             color: #fbbf24;
             background: #78350f55;
-        }
-
-        .nivel-admin {
-            color: #60a5fa;
-        }
-
-        .nivel-superadmin {
-            color: #fbbf24;
         }
 
         #carregando {
             padding: 40px;
             text-align: center;
-            color: var(--secondary);
+        }
+
+        .protegido {
+            color: #fbbf24;
+            font-size: 12px;
         }
 
         @media (max-width: 1050px) {
@@ -231,13 +236,6 @@
             .sidebar {
                 position: relative;
                 width: 100%;
-                padding: 16px;
-                border-right: none;
-                border-bottom: 1px solid var(--border);
-            }
-
-            .sidebar p {
-                margin-bottom: 15px;
             }
 
             .conteudo {
@@ -245,12 +243,8 @@
                 padding: 16px;
             }
 
-            .indicador {
-                padding: 16px;
-            }
-
             .painel {
-                padding: 16px;
+                padding: 15px;
             }
 
         }
@@ -287,8 +281,13 @@
 
             <div class="sidebar-footer">
 
-                <button id="sair">
+                <button
+                    id="sair"
+                    class="btn vermelho"
+                    style="width:100%;padding:13px">
+
                     Sair do sistema
+
                 </button>
 
             </div>
@@ -301,45 +300,35 @@
 
                 <h1>Painel administrativo</h1>
 
-                <p>Gerenciamento de usuários e acessos.</p>
+                <p>
+                    Gerenciamento de usuários e permissões.
+                </p>
 
             </header>
 
             <section class="indicadores">
 
                 <div class="indicador">
-
                     <span>Total de usuários</span>
-
-                    <strong id="totalUsuarios">0</strong>
-
+                    <strong id="total">0</strong>
                 </div>
 
                 <div class="indicador">
-
                     <span>Administradores</span>
-
-                    <strong id="totalAdmins"
-                            style="color: #60a5fa">0</strong>
-
+                    <strong id="admins"
+                            style="color:#60a5fa">0</strong>
                 </div>
 
                 <div class="indicador">
-
-                    <span>Usuários bloqueados</span>
-
-                    <strong id="totalBloqueados"
-                            style="color: #f87171">0</strong>
-
+                    <span>Bloqueados</span>
+                    <strong id="bloqueados"
+                            style="color:#f87171">0</strong>
                 </div>
 
                 <div class="indicador">
-
                     <span>Primeiro acesso</span>
-
-                    <strong id="totalPendentes"
-                            style="color: #fbbf24">0</strong>
-
+                    <strong id="pendentes"
+                            style="color:#fbbf24">0</strong>
                 </div>
 
             </section>
@@ -368,11 +357,12 @@
                                 <th>Permissão</th>
                                 <th>Status</th>
                                 <th>Último acesso</th>
+                                <th>Ações</th>
                             </tr>
 
                         </thead>
 
-                        <tbody id="listaUsuarios"></tbody>
+                        <tbody id="lista"></tbody>
 
                     </table>
 
@@ -393,13 +383,13 @@
     <script type="module">
 
         import { supabase } from "./supabase.js";
-
-        import {
-            obterPerfil,
-            sair
-        } from "./auth.js";
+        import { obterPerfil, sair } from "./auth.js";
 
         let usuarios = [];
+        let operador = null;
+        let processando = false;
+
+        const $ = id => document.getElementById(id);
 
         const permissoes = {
             superadmin: "Administrador principal",
@@ -407,189 +397,380 @@
             usuario: "Usuário comum"
         };
 
-        function adicionarCelula(linha, texto, classe = "") {
+        function mensagem(texto, erro = false) {
 
-            const celula = document.createElement("td");
+            $("mensagem").textContent = texto;
 
-            celula.textContent = texto;
-
-            if (classe) {
-                celula.className = classe;
-            }
-
-            linha.appendChild(celula);
-
-            return celula;
+            $("mensagem").className =
+                erro ? "erro" : "sucesso";
 
         }
 
-        function renderizarUsuarios(lista) {
+        async function chamarFuncao(nome, body) {
 
-            const tbody =
-                document.getElementById("listaUsuarios");
+            const { data, error } =
+                await supabase.functions.invoke(
+                    nome,
+                    { body }
+                );
 
-            tbody.replaceChildren();
+            if (error) {
 
-            for (const usuario of lista) {
+                let texto = "Não foi possível concluir a operação.";
+
+                try {
+
+                    const resposta = await error.context.json();
+
+                    texto = resposta.mensagem || texto;
+
+                } catch {}
+
+                throw new Error(texto);
+
+            }
+
+            if (!data?.sucesso) {
+
+                throw new Error(
+                    data?.mensagem || "Operação recusada."
+                );
+
+            }
+
+            return data;
+
+        }
+
+        function adicionarCelula(linha, texto) {
+
+            const td = document.createElement("td");
+
+            td.textContent = texto ?? "-";
+
+            linha.appendChild(td);
+
+            return td;
+
+        }
+
+        function criarBotao(texto, cor, acao, usuario) {
+
+            const botao = document.createElement("button");
+
+            botao.className = `btn ${cor}`;
+
+            botao.textContent = texto;
+
+            botao.disabled = processando;
+
+            botao.addEventListener("click", () => {
+
+                executarAcao(acao, usuario);
+
+            });
+
+            return botao;
+
+        }
+
+        function criarAcoes(usuario) {
+
+            const div = document.createElement("div");
+
+            div.className = "acoes";
+
+            const protegido =
+                usuario.perfil === "superadmin" ||
+                usuario.rf === "51112" ||
+                usuario.id === operador.id ||
+                (
+                    operador.perfil === "admin" &&
+                    usuario.perfil !== "usuario"
+                );
+
+            if (protegido) {
+
+                const texto = document.createElement("span");
+
+                texto.className = "protegido";
+
+                texto.textContent = "Conta protegida";
+
+                div.appendChild(texto);
+
+                return div;
+
+            }
+
+            div.appendChild(
+                criarBotao(
+                    usuario.ativo ? "Bloquear" : "Desbloquear",
+                    usuario.ativo ? "vermelho" : "verde",
+                    usuario.ativo ? "bloquear" : "desbloquear",
+                    usuario
+                )
+            );
+
+            div.appendChild(
+                criarBotao(
+                    "Redefinir senha",
+                    "amarelo",
+                    "redefinir_senha",
+                    usuario
+                )
+            );
+
+            div.appendChild(
+                criarBotao(
+                    "Encerrar sessões",
+                    "cinza",
+                    "encerrar_sessoes",
+                    usuario
+                )
+            );
+
+            if (operador.perfil === "superadmin") {
+
+                div.appendChild(
+                    criarBotao(
+                        usuario.perfil === "admin"
+                            ? "Remover admin"
+                            : "Tornar admin",
+
+                        "azul",
+
+                        usuario.perfil === "admin"
+                            ? "rebaixar"
+                            : "promover",
+
+                        usuario
+                    )
+                );
+
+            }
+
+            return div;
+
+        }
+
+        function renderizar() {
+
+            const termo = $("pesquisa")
+                .value.toLowerCase().trim();
+
+            $("lista").replaceChildren();
+
+            const filtrados = usuarios.filter(u =>
+
+                [
+                    u.rf,
+                    u.nome,
+                    u.cargo,
+                    u.secretaria
+                ].some(valor =>
+
+                    String(valor || "")
+                        .toLowerCase()
+                        .includes(termo)
+
+                )
+
+            );
+
+            for (const u of filtrados) {
 
                 const linha = document.createElement("tr");
 
-                adicionarCelula(linha, usuario.rf);
+                adicionarCelula(linha, u.rf);
 
-                adicionarCelula(linha, usuario.nome);
+                adicionarCelula(linha, u.nome);
 
-                adicionarCelula(
-                    linha,
-                    usuario.cargo || "-"
-                );
+                adicionarCelula(linha, u.cargo);
 
-                adicionarCelula(
-                    linha,
-                    usuario.secretaria || "-"
-                );
+                adicionarCelula(linha, u.secretaria);
 
                 adicionarCelula(
                     linha,
-                    permissoes[usuario.perfil] || "Usuário",
-                    usuario.perfil === "superadmin"
-                        ? "nivel-superadmin"
-                        : usuario.perfil === "admin"
-                            ? "nivel-admin"
-                            : ""
+                    permissoes[u.perfil] || "Usuário"
                 );
 
-                const celulaStatus =
-                    document.createElement("td");
+                const tdStatus = document.createElement("td");
 
                 const status = document.createElement("span");
 
                 status.className = "status";
 
-                if (!usuario.ativo) {
+                if (!u.ativo) {
 
                     status.textContent = "Bloqueado";
+
                     status.classList.add("bloqueado");
 
-                } else if (usuario.primeiro_acesso) {
+                } else if (u.primeiro_acesso) {
 
-                    status.textContent = "Primeiro acesso";
-                    status.classList.add("primeiro-acesso");
+                    status.textContent = "Alterar senha";
+
+                    status.classList.add("pendente");
 
                 } else {
 
                     status.textContent = "Ativo";
+
                     status.classList.add("ativo");
 
                 }
 
-                celulaStatus.appendChild(status);
+                tdStatus.appendChild(status);
 
-                linha.appendChild(celulaStatus);
+                linha.appendChild(tdStatus);
 
                 adicionarCelula(
                     linha,
-                    usuario.ultimo_acesso
-                        ? new Date(usuario.ultimo_acesso)
+                    u.ultimo_acesso
+                        ? new Date(u.ultimo_acesso)
                             .toLocaleString("pt-BR")
                         : "Nunca"
                 );
 
-                tbody.appendChild(linha);
+                const tdAcoes = document.createElement("td");
+
+                tdAcoes.appendChild(criarAcoes(u));
+
+                linha.appendChild(tdAcoes);
+
+                $("lista").appendChild(linha);
 
             }
-
-            document.getElementById("mensagem").textContent =
-                lista.length === 0
-                    ? "Nenhum usuário encontrado."
-                    : "";
 
         }
 
         function atualizarIndicadores() {
 
-            document.getElementById("totalUsuarios")
-                .textContent = usuarios.length;
+            $("total").textContent = usuarios.length;
 
-            document.getElementById("totalAdmins")
-                .textContent = usuarios.filter(
-                    u => ["admin", "superadmin"].includes(u.perfil)
-                ).length;
+            $("admins").textContent = usuarios.filter(
+                u => ["admin", "superadmin"].includes(u.perfil)
+            ).length;
 
-            document.getElementById("totalBloqueados")
-                .textContent = usuarios.filter(
-                    u => !u.ativo
-                ).length;
+            $("bloqueados").textContent = usuarios.filter(
+                u => !u.ativo
+            ).length;
 
-            document.getElementById("totalPendentes")
-                .textContent = usuarios.filter(
-                    u => u.primeiro_acesso
-                ).length;
+            $("pendentes").textContent = usuarios.filter(
+                u => u.primeiro_acesso
+            ).length;
 
         }
 
         async function carregarUsuarios() {
 
-            const { data, error } =
-                await supabase.functions.invoke(
-                    "admin-usuarios",
-                    { body: {} }
-                );
+            const resultado = await chamarFuncao(
+                "admin-usuarios",
+                {}
+            );
 
-            if (error || !data?.sucesso) {
-
-                document.getElementById("mensagem")
-                    .textContent =
-                    "Não foi possível carregar os usuários.";
-
-                return;
-
-            }
-
-            usuarios = data.usuarios;
+            usuarios = resultado.usuarios;
 
             atualizarIndicadores();
 
-            renderizarUsuarios(usuarios);
+            renderizar();
 
         }
 
-        document.getElementById("pesquisa")
-            .addEventListener("input", event => {
+        async function executarAcao(acao, usuario) {
 
-                const termo =
-                    event.target.value.toLowerCase().trim();
+            if (processando) return;
 
-                const filtrados = usuarios.filter(usuario =>
+            const descricoes = {
+                bloquear: "Bloquear usuário",
+                desbloquear: "Desbloquear usuário",
+                redefinir_senha: "Redefinir senha",
+                promover: "Promover a administrador",
+                rebaixar: "Remover privilégios administrativos",
+                encerrar_sessoes: "Encerrar sessões"
+            };
 
-                    [
-                        usuario.rf,
-                        usuario.nome,
-                        usuario.cargo,
-                        usuario.secretaria
-                    ].some(valor =>
-                        String(valor || "")
-                            .toLowerCase()
-                            .includes(termo)
-                    )
+            const confirmar = confirm(
+                `${descricoes[acao]}?\n\n` +
+                `${usuario.nome}\nRF: ${usuario.rf}`
+            );
 
+            if (!confirmar) return;
+
+            processando = true;
+
+            renderizar();
+
+            try {
+
+                const resultado = await chamarFuncao(
+                    "admin-acoes",
+                    {
+                        rf: usuario.rf,
+                        acao: acao
+                    }
                 );
 
-                renderizarUsuarios(filtrados);
+                if (resultado.senha_temporaria) {
 
-            });
+                    alert(
+                        "Senha temporária:\n\n" +
+                        resultado.senha_temporaria +
+                        "\n\nEntregue a senha ao funcionário." +
+                        "\nEle deverá alterá-la no próximo acesso."
+                    );
 
-        document.getElementById("sair")
-            .addEventListener("click", sair);
+                }
+
+                await carregarUsuarios();
+
+                mensagem(
+                    resultado.mensagem +
+                    (
+                        resultado.historico_registrado === false
+                            ? " Atenção: histórico não registrado."
+                            : ""
+                    )
+                );
+
+            } catch (erro) {
+
+                mensagem(erro.message, true);
+
+            } finally {
+
+                processando = false;
+
+                renderizar();
+
+            }
+
+        }
+
+        $("pesquisa").addEventListener(
+            "input", renderizar
+        );
+
+        $("sair").addEventListener("click", sair);
 
         async function iniciar() {
 
             try {
 
-                const perfil = await obterPerfil();
+                operador = await obterPerfil();
+
+                if (!operador) {
+
+                    window.location.replace("index.html");
+
+                    return;
+
+                }
 
                 if (
-                    !perfil ||
-                    !["admin", "superadmin"].includes(perfil.perfil)
+                    !["admin", "superadmin"]
+                        .includes(operador.perfil)
                 ) {
 
                     window.location.replace("dashboard.html");
@@ -598,20 +779,20 @@
 
                 }
 
-                document.getElementById("administrador")
-                    .textContent = permissoes[perfil.perfil];
-
-                document.getElementById("carregando")
-                    .hidden = true;
-
-                document.getElementById("app")
-                    .hidden = false;
+                $("administrador").textContent =
+                    permissoes[operador.perfil];
 
                 await carregarUsuarios();
 
-            } catch {
+                $("carregando").hidden = true;
 
-                window.location.replace("index.html");
+                $("app").hidden = false;
+
+            } catch (erro) {
+
+                $("carregando").textContent =
+                    "Não foi possível carregar o painel: " +
+                    erro.message;
 
             }
 
