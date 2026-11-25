@@ -8,7 +8,9 @@
           content="width=device-width, initial-scale=1.0">
 
     <title>Usuários | Sistema de Gestão</title>
-
+    
+    <link rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/sweetalert2@11.26.25/dist/sweetalert2.min.css">
     <link rel="stylesheet" href="layout.css">
 
     <style>
@@ -140,6 +142,15 @@
 
         import { montarLayout } from "./layout.js";
         import { supabase } from "./supabase.js";
+        import {
+    confirmar,
+    sucesso,
+    erro as mostrarErro,
+    notificacao,
+    informacao,
+    carregando,
+    fecharAlerta
+} from "./alertas.js";
 
         const $ = id => document.getElementById(id);
 
@@ -494,98 +505,116 @@
 
         }
 
-        async function executarAcao(acao, usuario) {
+        
+async function executarAcao(acao, usuario) {
 
-            if (processando) return;
+    if (processando) return;
 
-            const descricoes = {
+    const descricoes = {
 
-                bloquear: "Bloquear usuário",
+        bloquear: "Bloquear usuário?",
 
-                desbloquear: "Desbloquear usuário",
+        desbloquear: "Desbloquear usuário?",
 
-                redefinir_senha: "Redefinir senha",
+        redefinir_senha: "Redefinir senha?",
 
-                promover: "Promover a administrador",
+        promover: "Promover a administrador?",
 
-                rebaixar: "Remover administrador",
+        rebaixar: "Remover administrador?",
 
-                encerrar_sessoes: "Encerrar sessões"
+        encerrar_sessoes: "Encerrar sessões?"
 
-            };
+    };
 
-            if (!confirm(
-                `${descricoes[acao]}?\n\n` +
-                `${usuario.nome}\nRF: ${usuario.rf}`
-            )) return;
+    const confirmado = await confirmar(
 
-            processando = true;
+        descricoes[acao],
 
-            renderizar();
+        `${usuario.nome} — RF: ${usuario.rf}`,
 
-            mensagem("Processando operação...");
+        ["bloquear", "rebaixar"].includes(acao)
 
-            try {
+    );
 
-                const resultado = await chamarFuncao(
-                    "admin-acoes",
-                    {
-                        rf: usuario.rf,
-                        acao
-                    }
-                );
+    if (!confirmado || processando) return;
 
-                if (resultado.senha_temporaria) {
+    processando = true;
 
-                    alert(
-                        "Senha temporária:\n\n" +
-                        resultado.senha_temporaria +
-                        "\n\nEntregue a senha ao funcionário." +
-                        "\nA alteração será obrigatória."
-                    );
+    renderizar();
 
-                }
+    carregando("Executando operação administrativa.");
 
-                mensagem(
-                    resultado.mensagem +
-                    (
-                        resultado.historico_registrado === false
-                            ? " Histórico não registrado."
-                            : ""
-                    )
-                );
+    try {
 
-                try {
+        const resultado = await chamarFuncao(
 
-                    await carregarUsuarios();
+            "admin-acoes",
 
-                } catch {
-
-                    mensagem(
-                        resultado.mensagem +
-                        " Atualize a página para consultar os dados.",
-                        true
-                    );
-
-                }
-
-            } catch (erro) {
-
-                mensagem(erro.message, true);
-
-            } finally {
-
-                processando = false;
-
-                renderizar();
-
+            {
+                rf: usuario.rf,
+                acao
             }
+
+        );
+
+        fecharAlerta();
+
+        if (resultado.senha_temporaria) {
+
+            await informacao(
+
+                "Senha temporária: " +
+                resultado.senha_temporaria +
+                "\n\nEntregue ao funcionário. " +
+                "A alteração será obrigatória.",
+
+                "Senha redefinida"
+
+            );
+
+        } else {
+
+            await sucesso(resultado.mensagem);
 
         }
 
-        $("pesquisa").addEventListener(
-            "input", renderizar
-        );
+        if (resultado.historico_registrado === false) {
+
+            notificacao(
+                "Histórico não registrado.",
+                "warning"
+            );
+
+        }
+
+        try {
+
+            await carregarUsuarios();
+
+        } catch {
+
+            await mostrarErro(
+                "Operação realizada, mas não foi possível atualizar a lista."
+            );
+
+        }
+
+    } catch (e) {
+
+        fecharAlerta();
+
+        await mostrarErro(e.message);
+
+    } finally {
+
+        processando = false;
+
+        renderizar();
+
+    }
+
+}
+
 
         async function iniciar() {
 
