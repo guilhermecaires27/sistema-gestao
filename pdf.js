@@ -1,453 +1,88 @@
+import { PDFDocument, StandardFonts, rgb } from 'https://cdn.jsdelivr.net/npm/pdf-lib@1.17.1/+esm';
 
-import {
-    PDFDocument,
-    StandardFonts
-} from "https://cdn.jsdelivr.net/npm/pdf-lib@1.17.1/+esm";
-
-
-// CONFIGURACOES
-
-const MODELOS = {
-
-    abonada: "./modelos/falta-abonada.pdf",
-
-    justificativa: "./modelos/justificativa.pdf"
-
-};
-
-const LIMITE_ANEXO = 10 * 1024 * 1024;
-
-const MESES = [
-
-    "janeiro",
-    "fevereiro",
-    "março",
-    "abril",
-    "maio",
-    "junho",
-    "julho",
-    "agosto",
-    "setembro",
-    "outubro",
-    "novembro",
-    "dezembro"
-
-];
-
-
-// FORMATAR DATA
-
-export function formatarData(data) {
-
-    return data.split("-")
-        .reverse()
-        .join("/");
-
+export function hoje() {
+    const p = Object.fromEntries(new Intl.DateTimeFormat('en-CA', {timeZone:'America/Sao_Paulo',year:'numeric',month:'2-digit',day:'2-digit'}).formatToParts(new Date()).map(x=>[x.type,x.value]));
+    return `${p.year}-${p.month}-${p.day}`;
 }
-
-
-// SEPARAR DATA
-
-function separarData(data) {
-
-    const [ano, mes, dia] = data.split("-");
-
-    return {
-
-        ano,
-
-        mes,
-
-        dia,
-
-        mesExtenso: MESES[Number(mes) - 1]
-
-    };
-
+export function formatarData(d) { return d.split('-').reverse().join('/'); }
+function dataExtenso(d) {
+    return new Intl.DateTimeFormat('pt-BR',{day:'numeric',month:'long',year:'numeric',timeZone:'UTC'}).format(new Date(d+'T12:00:00Z'));
 }
-
-
-// CARREGAR MODELO PDF
-
-async function carregarModelo(caminho) {
-
-    const resposta = await fetch(caminho);
-
-    if (!resposta.ok) {
-
-        throw new Error(
-            "Não foi possível carregar o modelo PDF."
-        );
-
-    }
-
-    const bytes = await resposta.arrayBuffer();
-
-    return await PDFDocument.load(bytes);
-
+async function modelo(nome) {
+    const r=await fetch(new URL(`./modelos/${nome}.pdf`, import.meta.url));
+    if(!r.ok) throw new Error('Modelo PDF não localizado: '+nome);
+    return PDFDocument.load(await r.arrayBuffer());
 }
-
-
-// PREENCHER CAMPOS DO MODELO
-
-async function preencherModelo(
-    documento,
-    valores
-) {
-
-    const formulario = documento.getForm();
-
-    const fonte = await documento.embedFont(
-        StandardFonts.Helvetica
-    );
-
-    for (
-        const [campo, valor]
-        of Object.entries(valores)
-    ) {
-
-        try {
-
-            const texto =
-                formulario.getTextField(campo);
-
-            texto.setText(String(valor ?? ""));
-
-        } catch {
-
-            throw new Error(
-                `Campo "${campo}" inválido ou não encontrado no modelo.`
-            );
-
-        }
-
-    }
-
-    formulario.updateFieldAppearances(fonte);
-
-    formulario.flatten();
-
-}
-
-
-// GERAR FALTA ABONADA
-
-export async function gerarPdfAbonada(dados) {
-
-    const documento = await carregarModelo(
-        MODELOS.abonada
-    );
-
-    const falta = separarData(
-        dados.dataAbonada
-    );
-
-    const emissao = separarData(
-        dados.dataDocumento
-    );
-
-    const analise = separarData(
-        dados.dataAnalise
-    );
-
-    await preencherModelo(documento, {
-
-        nome: dados.nome,
-
-        registro: dados.registro,
-
-        cargo: dados.cargo,
-
-        falta_dia: falta.dia,
-
-        falta_mes: falta.mes,
-
-        falta_ano: falta.ano,
-
-        documento_dia: emissao.dia,
-
-        documento_mes: emissao.mesExtenso,
-
-        documento_ano: emissao.ano,
-
-        analise_dia: analise.dia,
-
-        analise_mes: analise.mesExtenso,
-
-        analise_ano: analise.ano
-
-    });
-
-    return await documento.save();
-
-}
-
-
-// FORMATAR HORARIOS
-
-function formatarHorarios(horarios) {
-
-    if (horarios.length === 1) {
-
-        return `no horário de ${horarios[0]}`;
-
-    }
-
-    const primeiros = horarios
-        .slice(0, -1)
-        .join(", ");
-
-    const ultimo =
-        horarios[horarios.length - 1];
-
-    return `nos horários de ${primeiros} e ${ultimo}`;
-
-}
-
-
-// VALIDAR E INCORPORAR ANEXO
-
-async function adicionarAnexo(
-    documento,
-    arquivo
-) {
-
-    if (!arquivo) return;
-
-    if (
-        !arquivo.size ||
-        arquivo.size > LIMITE_ANEXO
-    ) {
-
-        throw new Error(
-            "O anexo deve ter até 10 MB."
-        );
-
-    }
-
-    const bytes = new Uint8Array(
-        await arquivo.arrayBuffer()
-    );
-
-    const png = [
-
-        137, 80, 78, 71,
-        13, 10, 26, 10
-
-    ].every(
-        (valor, i) => bytes[i] === valor
-    );
-
-    const jpg =
-
-        bytes[0] === 255 &&
-        bytes[1] === 216 &&
-        bytes[2] === 255;
-
-    const pdf = new TextDecoder()
-        .decode(bytes.slice(0, 1024))
-        .includes("%PDF-");
-
-    const extensao = arquivo.name
-        .split(".")
-        .pop()
-        .toLowerCase()
-        .replace("jpeg", "jpg");
-
-    const tipo = png
-        ? "png"
-        : jpg
-        ? "jpg"
-        : pdf
-        ? "pdf"
-        : "";
-
-    if (!tipo || tipo !== extensao) {
-
-        throw new Error(
-            "O conteúdo do anexo não corresponde ao formato informado."
-        );
-
-    }
-
-
-    // ANEXO EM PDF
-
-    if (tipo === "pdf") {
-
-        let anexo;
-
-        try {
-
-            anexo = await PDFDocument.load(
-                bytes
-            );
-
-            const formulario = anexo.getForm();
-
-            if (formulario.getFields().length) {
-
-                formulario.flatten();
-
+// Ajusta as linhas ao espaço reservado, sem cortar nomes ou motivos longos.
+function bloco(p,fonte,texto,x,topo,largura,altura,tamanho=12) {
+    let linhas, passo;
+    const palavras=texto.trim().split(/\s+/);
+    for(;tamanho>=8;tamanho-=0.25) {
+        linhas=[]; let linha='';
+        for(const palavra of palavras) {
+            const candidato=linha?linha+' '+palavra:palavra;
+            if(fonte.widthOfTextAtSize(candidato,tamanho)<=largura) linha=candidato;
+            else {
+                if(linha) linhas.push(linha);
+                linha='';
+                for(const c of palavra) {
+                    if(fonte.widthOfTextAtSize(linha+c,tamanho)>largura) {linhas.push(linha);linha='';}
+                    linha+=c;
+                }
             }
-
-        } catch {
-
-            throw new Error(
-                "Não foi possível abrir o PDF anexo. Confira se ele está íntegro e sem senha."
-            );
-
         }
-
-        const paginas = await documento.copyPages(
-
-            anexo,
-
-            anexo.getPageIndices()
-
-        );
-
-        paginas.forEach(pagina => {
-
-            documento.addPage(pagina);
-
-        });
-
-        return;
-
+        if(linha)linhas.push(linha);
+        passo=tamanho*1.48;
+        if(linhas.length*passo<=altura) break;
     }
-
-
-    // ANEXO EM JPG OU PNG
-
-    const imagem = tipo === "png"
-
-        ? await documento.embedPng(bytes)
-
-        : await documento.embedJpg(bytes);
-
-
-    // Criar pagina A4
-
-    const largura = 595.28;
-
-    const altura = 841.89;
-
-    const margem = 30;
-
-    const pagina = documento.addPage([
-
-        largura,
-
-        altura
-
-    ]);
-
-    const escala = Math.min(
-
-        (largura - margem * 2) / imagem.width,
-
-        (altura - margem * 2) / imagem.height,
-
-        1
-
-    );
-
-    const dimensoes = imagem.scale(escala);
-
-    pagina.drawImage(imagem, {
-
-        x: (largura - dimensoes.width) / 2,
-
-        y: (altura - dimensoes.height) / 2,
-
-        width: dimensoes.width,
-
-        height: dimensoes.height
-
-    });
-
+    if(tamanho<8)throw new Error('O texto não cabe no modelo. Reduza o tamanho do motivo ou a quantidade de horários.');
+    linhas.forEach((l,i)=>p.drawText(l,{x,y:p.getHeight()-topo-tamanho-i*passo,size:tamanho,font:fonte,color:rgb(0,0,0)}));
 }
-
-
-// GERAR JUSTIFICATIVA
-
-export async function gerarPdfJustificativa(dados) {
-
-    const documento = await carregarModelo(
-        MODELOS.justificativa
-    );
-
-    await preencherModelo(documento, {
-
-        rf: dados.rf,
-
-        nome: dados.nome,
-
-        cargo: dados.cargo,
-
-        data: formatarData(dados.data),
-
-        trechoHorarios: formatarHorarios(
-            dados.horarios
-        ),
-
-        motivo: dados.motivo
-
-    });
-
-    await adicionarAnexo(
-
-        documento,
-
-        dados.anexo
-
-    );
-
-    return await documento.save();
-
+export async function gerarPdfAbonada(d) {
+    const doc=await modelo('falta-abonada'), p=doc.getPage(0), fonte=await doc.embedFont(StandardFonts.Helvetica);
+    bloco(p,fonte,`Eu, ${d.nome}, matrícula funcional ${d.registro}, funcionário (a) público(a) municipal titular no cargo de ${d.cargo}, lotado(a) na Secretaria Municipal de Administração, vem mui respeitosamente requerer, nos termos do Art. 141-A da Lei Complementar nº 15 de 28 de maio de 1992, que dispõe sobre o ABONO de minha falta do dia ${formatarData(d.dataAbonada)}, para tratar de interesses particulares.`,71,132,470,112);
+    bloco(p,fonte,`Praia Grande, ${dataExtenso(d.dataDocumento)}`,71,269,470,22);
+    bloco(p,fonte,`Praia Grande, ${dataExtenso(d.dataAnalise)}`,71,662,470,22);
+    return doc.save();
 }
-
-
-// CRIAR URL TEMPORARIA DO PDF
-
-export function criarUrlPdf(bytes) {
-
-    const arquivo = new Blob(
-
-        [bytes],
-
-        { type: "application/pdf" }
-
-    );
-
-    return URL.createObjectURL(arquivo);
-
+async function anexar(doc,arquivo) {
+    if(!arquivo)return;
+    if(!arquivo.size || arquivo.size>10*1024*1024)throw new Error('Anexo vazio ou maior que 10 MB.');
+    const bytes=new Uint8Array(await arquivo.arrayBuffer());
+    const png=[137,80,78,71,13,10,26,10].every((n,i)=>bytes[i]===n);
+    const jpg=bytes[0]===255&&bytes[1]===216&&bytes[2]===255;
+    const pdf=new TextDecoder().decode(bytes.slice(0,1024)).includes('%PDF-');
+    const tipo=png?'png':jpg?'jpg':pdf?'pdf':'';
+    if(!tipo || tipo!==arquivo.name.split('.').pop().toLowerCase().replace('jpeg','jpg'))throw new Error('Formato de anexo inválido.');
+    if(pdf){
+        const a=await PDFDocument.load(bytes);
+        if(!a.getPageCount())throw new Error('PDF sem páginas.');
+        if(a.getForm().getFields().length)a.getForm().flatten();
+        for(const p of await doc.copyPages(a,a.getPageIndices()))doc.addPage(p);
+    } else {
+        const img=png?await doc.embedPng(bytes):await doc.embedJpg(bytes);
+        const p=doc.addPage([595.28,841.89]);
+        const {width,height}=img.scale(Math.min((p.getWidth()-60)/img.width,(p.getHeight()-60)/img.height));
+        p.drawImage(img,{x:(p.getWidth()-width)/2,y:(p.getHeight()-height)/2,width,height});
+    }
 }
-
-
-// BAIXAR PDF
-
-export function baixarPdf(bytes, nome) {
-
-    const url = criarUrlPdf(bytes);
-
-    const link = document.createElement("a");
-
-    link.href = url;
-
-    link.download = nome;
-
-    document.body.appendChild(link);
-
-    link.click();
-
-    link.remove();
-
-    setTimeout(() => {
-
-        URL.revokeObjectURL(url);
-
-    }, 60000);
-
+export async function gerarPdfJustificativa(d){
+    const doc=await modelo('justificativa'), p=doc.getPage(0), fonte=await doc.embedFont(StandardFonts.Helvetica);
+    const h=d.horarios.length===1?'no horário de '+d.horarios[0]:'nos horários de '+d.horarios.slice(0,-1).join(', ')+' e '+d.horarios.at(-1);
+    const texto=`Eu, Lidiane Santana Da Silva, RF 44.695, Diretora da Divisão Administrativa, lotado na Secretaria de Administração, autorizo a justificativa do ponto eletrônico referente ao dia ${formatarData(d.data)}, ${h} do (a) servidor (a) ${d.nome}, RF ${d.rf}, ocupante do cargo/função de ${d.cargo}, em face de ${d.motivo}.`;
+    bloco(p,fonte,texto,71,178,471,132,12);
+    await anexar(doc,d.anexo);
+    return doc.save();
 }
+export function criarUrlPdf(bytes){return URL.createObjectURL(new Blob([bytes],{type:'application/pdf'}));}
+export function exibirPdf(bytes,nome,form){
+    const antigo=document.getElementById('resultadoPdf');
+    if(antigo){URL.revokeObjectURL(antigo.dataset.url);antigo.remove();}
+    const url=criarUrlPdf(bytes), caixa=document.createElement('div');
+    caixa.id='resultadoPdf';caixa.dataset.url=url;caixa.className='form-acoes';
+    caixa.style.cssText='display:flex;gap:10px;flex-wrap:wrap;margin-top:20px;';
+    const download=document.createElement('a');download.href=url;download.download=nome;download.className='sg-btn';download.textContent='Baixar PDF';
+    const abrir=document.createElement('a');abrir.href=url;abrir.target='_blank';abrir.rel='noopener noreferrer';abrir.className='sg-btn sg-btn-secondary';abrir.textContent='Abrir PDF para imprimir';
+    caixa.append(download,abrir);form.append(caixa);
+}
+export function limparPdf(){const el=document.getElementById('resultadoPdf');if(el){URL.revokeObjectURL(el.dataset.url);el.remove();}}
