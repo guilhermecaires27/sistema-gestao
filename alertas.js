@@ -1,19 +1,11 @@
 
 import Swal from "https://cdn.jsdelivr.net/npm/sweetalert2@11.26.25/+esm";
 
-// Configuração visual padrão
+// Tema Bulma
 
 export const Alerta = Swal.mixin({
 
-    theme: "dark",
-
-    background: "#1e293b",
-
-    color: "#f1f5f9",
-
-    confirmButtonColor: "#2563eb",
-
-    cancelButtonColor: "#475569",
+    theme: "bulma-dark",
 
     confirmButtonText: "OK",
 
@@ -21,95 +13,59 @@ export const Alerta = Swal.mixin({
 
     reverseButtons: true,
 
-    heightAuto: false,
-
-    customClass: {
-
-        popup: "sg-alerta",
-
-        title: "sg-alerta-titulo",
-
-        confirmButton: "sg-alerta-confirmar",
-
-        cancelButton: "sg-alerta-cancelar"
-
-    }
+    heightAuto: false
 
 });
 
-// Mensagem de sucesso
+// Sucesso
 
 export function sucesso(mensagem, titulo = "Sucesso!") {
 
     return Alerta.fire({
-
         icon: "success",
-
         titleText: titulo,
-
-        text: mensagem,
-
-        iconColor: "#4ade80"
-
+        text: mensagem
     });
 
 }
 
-// Mensagem de erro
+// Erro
 
 export function erro(mensagem, titulo = "Algo deu errado!") {
 
     return Alerta.fire({
-
         icon: "error",
-
         titleText: titulo,
-
-        text: mensagem,
-
-        iconColor: "#f87171"
-
+        text: mensagem
     });
 
 }
 
-// Mensagem de atenção
+// Atenção
 
 export function aviso(mensagem, titulo = "Atenção!") {
 
     return Alerta.fire({
-
         icon: "warning",
-
         titleText: titulo,
-
-        text: mensagem,
-
-        iconColor: "#fbbf24"
-
+        text: mensagem
     });
 
 }
 
-// Mensagem informativa
+// Informação
 
 export function informacao(mensagem, titulo = "Informação") {
 
     return Alerta.fire({
-
         icon: "info",
-
         titleText: titulo,
-
-        text: mensagem,
-
-        iconColor: "#60a5fa"
-
+        text: mensagem
     });
 
 }
 
-// Confirmação de operações
+// Confirmação
 
 export async function confirmar(
     titulo,
@@ -132,9 +88,7 @@ export async function confirmar(
         cancelButtonText: "Cancelar",
 
         confirmButtonColor:
-            perigoso ? "#dc2626" : "#2563eb",
-
-        iconColor: "#fbbf24",
+            perigoso ? "#f14668" : undefined,
 
         focusCancel: true
 
@@ -185,7 +139,7 @@ export function notificacao(
 
 }
 
-// Janela de carregamento
+// Carregamento
 
 export function carregando(
     mensagem = "Aguarde um momento..."
@@ -213,7 +167,7 @@ export function carregando(
 
 }
 
-// Fechar janela
+// Fechar alerta
 
 export function fecharAlerta() {
 
