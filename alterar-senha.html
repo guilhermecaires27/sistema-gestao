@@ -1,0 +1,236 @@
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Alterar senha | Sistema de Gestão</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <main class="login-container">
+
+        <div class="login-header">
+
+            <div class="logo">
+                <svg width="36" height="36" viewBox="0 0 24 24"
+                     fill="none" stroke="currentColor" stroke-width="1.8">
+                    <rect x="4" y="11" width="16" height="11" rx="2"/>
+                    <path d="M8 11V7a4 4 0 0 1 8 0v4"/>
+                    <circle cx="12" cy="16" r="1"/>
+                    <path d="M12 17v2"/>
+                </svg>
+            </div>
+
+            <h1>Sistema de Gestão</h1>
+            <p>Configuração de segurança</p>
+
+        </div>
+
+        <section class="login-card">
+
+            <h2>Alteração de senha</h2>
+
+            <p class="subtitle">
+                Por segurança, você deve criar uma nova senha antes de continuar.
+            </p>
+
+            <form id="alterarSenhaForm">
+
+                <div class="form-group">
+
+                    <label for="novaSenha">Nova senha</label>
+
+                    <div class="password-container">
+
+                        <input
+                            type="password"
+                            id="novaSenha"
+                            placeholder="Digite sua nova senha"
+                            minlength="8"
+                            autocomplete="new-password"
+                            required>
+
+                        <button
+                            type="button"
+                            class="toggle-password"
+                            data-target="novaSenha">
+                            Mostrar
+                        </button>
+
+                    </div>
+
+                </div>
+
+                <div class="form-group">
+
+                    <label for="confirmarSenha">
+                        Confirmar nova senha
+                    </label>
+
+                    <div class="password-container">
+
+                        <input
+                            type="password"
+                            id="confirmarSenha"
+                            placeholder="Repita sua nova senha"
+                            minlength="8"
+                            autocomplete="new-password"
+                            required>
+
+                        <button
+                            type="button"
+                            class="toggle-password"
+                            data-target="confirmarSenha">
+                            Mostrar
+                        </button>
+
+                    </div>
+
+                </div>
+
+                <div class="password-requirements">
+
+                    <p id="requisitoTamanho">
+                        ○ Mínimo de 8 caracteres
+                    </p>
+
+                    <p id="requisitoIgualdade">
+                        ○ As senhas devem coincidir
+                    </p>
+
+                </div>
+
+                <button type="submit" class="btn-login">
+                    Alterar senha e continuar
+                </button>
+
+                <div id="mensagem" role="status"></div>
+
+            </form>
+
+            <div class="divider"></div>
+
+            <div class="register">
+                <a href="index.html">Voltar ao login</a>
+            </div>
+
+        </section>
+
+        <footer>
+            Sistema de Gestão &bull; Versão 1.0
+        </footer>
+
+    </main>
+
+    <script>
+
+        const novaSenha =
+            document.getElementById("novaSenha");
+
+        const confirmarSenha =
+            document.getElementById("confirmarSenha");
+
+        const mensagem =
+            document.getElementById("mensagem");
+
+        const requisitoTamanho =
+            document.getElementById("requisitoTamanho");
+
+        const requisitoIgualdade =
+            document.getElementById("requisitoIgualdade");
+
+        // Mostrar e ocultar senhas
+
+        document.querySelectorAll(".toggle-password")
+            .forEach(function (botao) {
+
+                botao.addEventListener("click", function () {
+
+                    const campo = document.getElementById(
+                        botao.dataset.target
+                    );
+
+                    const mostrar = campo.type === "password";
+
+                    campo.type = mostrar ? "text" : "password";
+
+                    botao.textContent = mostrar
+                        ? "Ocultar"
+                        : "Mostrar";
+
+                });
+
+            });
+
+        // Validar requisitos em tempo real
+
+        function validarRequisitos() {
+
+            const tamanhoValido = novaSenha.value.length >= 8;
+
+            const senhasIguais =
+                novaSenha.value.length > 0 &&
+                novaSenha.value === confirmarSenha.value;
+
+            requisitoTamanho.textContent =
+                (tamanhoValido ? "✓" : "○") +
+                " Mínimo de 8 caracteres";
+
+            requisitoIgualdade.textContent =
+                (senhasIguais ? "✓" : "○") +
+                " As senhas devem coincidir";
+
+            requisitoTamanho.classList.toggle(
+                "valido", tamanhoValido
+            );
+
+            requisitoIgualdade.classList.toggle(
+                "valido", senhasIguais
+            );
+
+        }
+
+        novaSenha.addEventListener("input", validarRequisitos);
+
+        confirmarSenha.addEventListener(
+            "input", validarRequisitos
+        );
+
+        // Validar formulário
+
+        document.getElementById("alterarSenhaForm")
+            .addEventListener("submit", function (event) {
+
+                event.preventDefault();
+
+                mensagem.className = "erro";
+
+                if (novaSenha.value.length < 8) {
+
+                    mensagem.textContent =
+                        "A senha deve ter no mínimo 8 caracteres.";
+
+                    return;
+                }
+
+                if (novaSenha.value !== confirmarSenha.value) {
+
+                    mensagem.textContent =
+                        "As senhas não coincidem.";
+
+                    return;
+                }
+
+                mensagem.className = "";
+
+                mensagem.textContent =
+                    "Dados validados. A autenticação ainda não foi conectada.";
+
+            });
+
+    </script>
+
+</body>
+</html>
