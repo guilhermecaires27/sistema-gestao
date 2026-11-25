@@ -1,3 +1,4 @@
+
 import { iniciarTema } from "./tema.js";
 import { obterPerfil, sair } from "./auth.js";
 import { confirmar } from "./alertas.js";
@@ -11,15 +12,15 @@ const PERMISSOES = {
 const ICONES = {
 
     abonada: `
-    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
-    <path d="M14 2v6h6"/>
-    <path d="M8 13h8M8 17h8"/>
-`,
+        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+        <path d="M14 2v6h6"/>
+        <path d="M8 13h8M8 17h8"/>
+    `,
 
     avisos: `
-    <path d="m3 11 18-7v16L3 14v-3z"/>
-    <path d="m7 15 2 6h4l-2-5"/>
-`,
+        <path d="m3 11 18-7v16L3 14v-3z"/>
+        <path d="m7 15 2 6h4l-2-5"/>
+    `,
 
     sistema: `
         <path d="M12 22s8-4 8-11V5l-8-3-8 3v6c0 7 8 11 8 11z"/>
@@ -71,6 +72,9 @@ const ICONES = {
 
 };
 
+
+// GERAR ICONES
+
 function icone(nome) {
 
     return `
@@ -92,6 +96,9 @@ function icone(nome) {
 
 }
 
+
+// INICIAIS DO USUARIO
+
 function iniciais(nome) {
 
     const partes = String(nome || "Usuário")
@@ -108,6 +115,9 @@ function iniciais(nome) {
     ).toUpperCase();
 
 }
+
+
+// CRIAR LINKS DO MENU
 
 function criarLink({
     texto,
@@ -147,6 +157,9 @@ function criarLink({
     return link;
 
 }
+
+
+// MONTAR LAYOUT PRINCIPAL
 
 export async function montarLayout({
 
@@ -190,6 +203,9 @@ export async function montarLayout({
 
     }
 
+
+    // VERIFICAR PERMISSOES
+
     const administrador =
         ["admin", "superadmin"].includes(perfil.perfil);
 
@@ -201,6 +217,9 @@ export async function montarLayout({
 
     }
 
+
+    // PREPARAR CONTEUDO DA PAGINA
+
     document.body.classList.add("sg-body");
 
     const conteudo = document.createDocumentFragment();
@@ -210,6 +229,9 @@ export async function montarLayout({
         conteudo.appendChild(app.firstChild);
 
     }
+
+
+    // ESTRUTURA DO LAYOUT
 
     app.innerHTML = `
 
@@ -223,28 +245,39 @@ export async function montarLayout({
             <div class="sg-marca">
 
                 <div class="sg-marca-icone">
+
                     ${icone("sistema")}
+
                 </div>
 
                 <div>
+
                     <h2>Sistema de Gestão</h2>
+
                     <p>Portal de serviços</p>
+
                 </div>
 
             </div>
 
+
             <nav class="sg-menu">
 
                 <p class="sg-menu-titulo">
+
                     PRINCIPAL
+
                 </p>
 
                 <div id="sgMenuPrincipal"></div>
 
+
                 <div id="sgAreaAdmin" hidden>
 
                     <p class="sg-menu-titulo">
+
                         ADMINISTRAÇÃO
+
                     </p>
 
                     <div id="sgMenuAdmin"></div>
@@ -252,6 +285,7 @@ export async function montarLayout({
                 </div>
 
             </nav>
+
 
             <div class="sg-sidebar-footer">
 
@@ -265,21 +299,25 @@ export async function montarLayout({
                 </button>
 
                 <p class="sg-versao">
+
                     Sistema de Gestão • Versão 1.0
+
                 </p>
 
             </div>
 
         </aside>
 
+
         <div class="sg-conteudo">
 
             <header class="sg-topbar">
 
-                <button class="sg-btn sg-btn-secondary sg-abrir-menu"
-                        id="sgAbrirMenu"
-                        aria-label="Abrir menu"
-                        aria-expanded="false">
+                <button
+                    class="sg-btn sg-btn-secondary sg-abrir-menu"
+                    id="sgAbrirMenu"
+                    aria-label="Abrir menu"
+                    aria-expanded="false">
 
                     ${icone("menu")}
 
@@ -287,16 +325,19 @@ export async function montarLayout({
 
                 <h2 id="sgTitulo"></h2>
 
+
                 <div class="sg-usuario">
-                <button
-    type="button"
-    class="sg-tema"
-    id="sgAlternarTema"
-    aria-label="Alternar tema">
 
-    ☀
+                    <button
+                        type="button"
+                        class="sg-tema"
+                        id="sgAlternarTema"
+                        aria-label="Alternar tema">
 
-</button>
+                        ☀
+
+                    </button>
+
 
                     <div class="sg-usuario-info">
 
@@ -314,6 +355,7 @@ export async function montarLayout({
 
             </header>
 
+
             <main class="sg-pagina"
                   id="sgPagina">
             </main>
@@ -322,7 +364,11 @@ export async function montarLayout({
 
     `;
 
+
     const $ = id => document.getElementById(id);
+
+
+    // PREENCHER DADOS DO USUARIO
 
     $("sgPagina").appendChild(conteudo);
 
@@ -333,7 +379,12 @@ export async function montarLayout({
     $("sgNivel").textContent =
         PERMISSOES[perfil.perfil] || "Usuário comum";
 
-    $("sgAvatar").textContent = iniciais(perfil.nome);
+    $("sgAvatar").textContent =
+        iniciais(perfil.nome);
+
+
+    // MENU PRINCIPAL
+    // Disponivel para todos os usuarios
 
     const menuPrincipal = [
 
@@ -349,6 +400,13 @@ export async function montarLayout({
             href: "dashboard.html",
             simbolo: "inicio",
             pagina: "inicio"
+        },
+
+        {
+            texto: "Falta Abonada",
+            href: "falta-abonada.html",
+            simbolo: "abonada",
+            pagina: "falta-abonada"
         },
 
         {
@@ -375,14 +433,11 @@ export async function montarLayout({
 
     ];
 
-    const menuAdmin = [
 
-        {
-    texto: "Falta Abonada",
-    href: "falta-abonada.html",
-    simbolo: "abonada",
-    pagina: "falta-abonada"
-},
+    // MENU ADMINISTRATIVO
+    // Exclusivo para admin e superadmin
+
+    const menuAdmin = [
 
         {
             texto: "Gerenciar usuários",
@@ -400,6 +455,9 @@ export async function montarLayout({
 
     ];
 
+
+    // CARREGAR MENU PRINCIPAL
+
     for (const item of menuPrincipal) {
 
         $("sgMenuPrincipal").appendChild(
@@ -412,6 +470,9 @@ export async function montarLayout({
         );
 
     }
+
+
+    // CARREGAR MENU ADMINISTRATIVO
 
     if (administrador) {
 
@@ -432,6 +493,9 @@ export async function montarLayout({
 
     }
 
+
+    // MENU RESPONSIVO
+
     function fecharMenu() {
 
         $("sgSidebar").classList.remove("aberto");
@@ -443,6 +507,7 @@ export async function montarLayout({
         );
 
     }
+
 
     $("sgAbrirMenu").addEventListener("click", () => {
 
@@ -458,9 +523,15 @@ export async function montarLayout({
 
     });
 
+
     $("sgOverlay").addEventListener(
-        "click", fecharMenu
+
+        "click",
+
+        fecharMenu
+
     );
+
 
     document.addEventListener("keydown", event => {
 
@@ -472,32 +543,43 @@ export async function montarLayout({
 
     });
 
+
     document.querySelectorAll(".sg-menu a")
         .forEach(link => {
 
             link.addEventListener(
-                "click", fecharMenu
+
+                "click",
+
+                fecharMenu
+
             );
 
         });
 
+
+    // SAIR DO SISTEMA
+
     $("sgSair").addEventListener("click", async () => {
 
-    const confirmado = await confirmar(
+        const confirmado = await confirmar(
 
-        "Sair do sistema?",
+            "Sair do sistema?",
 
-        "Você será redirecionado para a página de login."
+            "Você será redirecionado para a página de login."
 
-    );
+        );
 
-    if (confirmado) {
+        if (confirmado) {
 
-        await sair();
+            await sair();
 
-    }
+        }
 
-});
+    });
+
+
+    // FINALIZAR CARREGAMENTO
 
     const carregando =
         document.getElementById("carregando");
@@ -508,10 +590,16 @@ export async function montarLayout({
 
     }
 
+
+    // INICIALIZAR TEMA
+
     iniciarTema();
 
-app.hidden = false;
 
-return perfil;
+    // EXIBIR PAGINA
+
+    app.hidden = false;
+
+    return perfil;
 
 }
