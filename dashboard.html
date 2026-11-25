@@ -1,0 +1,199 @@
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Dashboard | Sistema de Gestão</title>
+
+    <link rel="stylesheet" href="style.css">
+
+    <style>
+
+        .dashboard {
+            width: 100%;
+            max-width: 850px;
+        }
+
+        .dashboard-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        .dashboard-header h1 {
+            font-size: 25px;
+        }
+
+        .dados-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+            margin-top: 25px;
+        }
+
+        .dado {
+            background: #0f172a;
+            padding: 18px;
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            overflow-wrap: anywhere;
+        }
+
+        .dado span {
+            display: block;
+            color: var(--secondary);
+            font-size: 13px;
+            margin-bottom: 8px;
+        }
+
+        .btn-sair {
+            background: #dc2626;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            padding: 12px 20px;
+            cursor: pointer;
+        }
+
+        .status-validado {
+            color: #4ade80;
+            font-size: 13px;
+            margin-top: 24px;
+        }
+
+        @media (max-width: 600px) {
+
+            .dados-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .dashboard-header h1 {
+                font-size: 20px;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+    <p id="carregando">Verificando acesso...</p>
+
+    <main class="dashboard" id="dashboard" hidden>
+
+        <header class="dashboard-header">
+
+            <h1>Sistema de Gestão</h1>
+
+            <button id="sair" class="btn-sair">
+                Sair
+            </button>
+
+        </header>
+
+        <section class="login-card">
+
+            <p class="subtitle">Bem-vindo ao sistema</p>
+
+            <h2 id="nome"></h2>
+
+            <div class="dados-grid">
+
+                <div class="dado">
+                    <span>Registro Funcional</span>
+                    <strong id="rf"></strong>
+                </div>
+
+                <div class="dado">
+                    <span>Cargo</span>
+                    <strong id="cargo"></strong>
+                </div>
+
+                <div class="dado">
+                    <span>Secretaria</span>
+                    <strong id="secretaria"></strong>
+                </div>
+
+                <div class="dado">
+                    <span>Nível de acesso</span>
+                    <strong id="perfil"></strong>
+                </div>
+
+            </div>
+
+            <p class="status-validado">
+                ✓ Sessão validada pelo Crachá Digital
+            </p>
+
+        </section>
+
+        <footer>
+            Sistema de Gestão &bull; Versão 1.0
+        </footer>
+
+    </main>
+
+    <script type="module">
+
+        import {
+            obterPerfil,
+            sair
+        } from "./auth.js";
+
+        try {
+
+            const perfil = await obterPerfil();
+
+            if (!perfil) {
+
+                window.location.replace("index.html");
+
+            } else {
+
+                const permissoes = {
+                    superadmin: "Administrador principal",
+                    admin: "Administrador",
+                    usuario: "Usuário comum"
+                };
+
+                document.getElementById("nome").textContent =
+                    perfil.nome;
+
+                document.getElementById("rf").textContent =
+                    perfil.rf;
+
+                document.getElementById("cargo").textContent =
+                    perfil.cargo || "Não informado";
+
+                document.getElementById("secretaria").textContent =
+                    perfil.secretaria || "Não informada";
+
+                document.getElementById("perfil").textContent =
+                    permissoes[perfil.perfil] || "Usuário";
+
+                document.getElementById("carregando").hidden = true;
+
+                document.getElementById("dashboard").hidden = false;
+
+            }
+
+        } catch {
+
+            window.location.replace("index.html");
+
+        }
+
+        document.getElementById("sair")
+            .addEventListener("click", sair);
+
+    </script>
+
+</body>
+</html>
