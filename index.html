@@ -105,59 +105,93 @@
 
     </main>
 
-    <script>
+    
+<script type="module">
 
-        const senha = document.getElementById("senha");
-        const toggle = document.getElementById("togglePassword");
-        const mensagem = document.getElementById("mensagem");
+    import { realizarLogin } from "./auth.js";
 
-        toggle.addEventListener("click", function () {
+    const formulario = document.getElementById("loginForm");
+    const senha = document.getElementById("senha");
+    const toggle = document.getElementById("togglePassword");
+    const mensagem = document.getElementById("mensagem");
 
-            const mostrar = senha.type === "password";
+    const botao = formulario.querySelector(
+        'button[type="submit"]'
+    );
 
-            senha.type = mostrar ? "text" : "password";
+    toggle.addEventListener("click", function () {
 
-            toggle.textContent = mostrar
-                ? "Ocultar"
-                : "Mostrar";
+        const mostrar = senha.type === "password";
+
+        senha.type = mostrar ? "text" : "password";
+
+        toggle.textContent = mostrar
+            ? "Ocultar"
+            : "Mostrar";
+
+    });
+
+    formulario.addEventListener("submit", async function (event) {
+
+        event.preventDefault();
+
+        const rf = document.getElementById("rf").value.trim();
+
+        botao.disabled = true;
+        botao.textContent = "Validando acesso...";
+
+        mensagem.className = "";
+        mensagem.textContent = "Consultando informações...";
+
+        try {
+
+            const resultado = await realizarLogin(
+                rf,
+                senha.value
+            );
+
+            if (!resultado.sucesso) {
+
+                mensagem.className = "erro";
+                mensagem.textContent = resultado.mensagem;
+                return;
+
+            }
+
+            mensagem.className = "sucesso";
+
+            mensagem.textContent = resultado.primeiro_acesso
+                ? "Login validado! Alteração de senha necessária."
+                : "Login validado com sucesso!";
+
+        } catch {
+
+            mensagem.className = "erro";
+            mensagem.textContent = "Erro ao realizar login.";
+
+        } finally {
+
+            botao.disabled = false;
+            botao.textContent = "Entrar no sistema";
+
+        }
+
+    });
+
+    document.getElementById("forgotPassword")
+        .addEventListener("click", function (event) {
+
+            event.preventDefault();
+
+            mensagem.className = "";
+
+            mensagem.textContent =
+                "Entre em contato com o administrador para redefinir sua senha.";
 
         });
 
-        document.getElementById("loginForm")
-            .addEventListener("submit", function (event) {
+</script>
 
-                event.preventDefault();
-
-                const rf = document.getElementById("rf").value.trim();
-
-                if (!/^\d+$/.test(rf)) {
-
-                    mensagem.className = "erro";
-                    mensagem.textContent = "Informe um RF válido.";
-
-                    return;
-                }
-
-                mensagem.className = "";
-
-                mensagem.textContent =
-                    "O sistema de autenticação ainda não foi configurado.";
-
-            });
-
-        document.getElementById("forgotPassword")
-            .addEventListener("click", function (event) {
-
-                event.preventDefault();
-
-                mensagem.className = "";
-
-                mensagem.textContent =
-                    "Para redefinir sua senha, entre em contato com o administrador do sistema.";
-
-            });
-
-    </script>
 
 </body>
 </html>
