@@ -1,0 +1,625 @@
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Painel Administrativo | Sistema de Gestão</title>
+
+    <link rel="stylesheet" href="style.css">
+
+    <style>
+
+        body {
+            display: block;
+            padding: 0;
+        }
+
+        [hidden] {
+            display: none !important;
+        }
+
+        .sidebar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            bottom: 0;
+            width: 240px;
+            background: #111c2e;
+            border-right: 1px solid var(--border);
+            padding: 25px 18px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .sidebar h2 {
+            font-size: 20px;
+            margin-bottom: 8px;
+        }
+
+        .sidebar p {
+            color: var(--secondary);
+            font-size: 12px;
+            margin-bottom: 35px;
+        }
+
+        .menu a,
+        .menu button {
+            display: block;
+            width: 100%;
+            padding: 14px;
+            margin-bottom: 8px;
+            color: var(--text);
+            text-decoration: none;
+            border-radius: 8px;
+            background: transparent;
+            border: none;
+            text-align: left;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        .menu a:hover {
+            background: #1e293b;
+        }
+
+        .menu .selecionado {
+            background: var(--primary);
+        }
+
+        .sidebar-footer {
+            margin-top: auto;
+        }
+
+        .sidebar-footer button {
+            width: 100%;
+            background: #dc2626;
+            color: white;
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+
+        .conteudo {
+            margin-left: 240px;
+            padding: 32px;
+        }
+
+        .cabecalho {
+            margin-bottom: 28px;
+        }
+
+        .cabecalho h1 {
+            font-size: 27px;
+            margin-bottom: 8px;
+        }
+
+        .cabecalho p {
+            color: var(--secondary);
+            font-size: 14px;
+        }
+
+        .indicadores {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 16px;
+            margin-bottom: 28px;
+        }
+
+        .indicador {
+            padding: 22px;
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+        }
+
+        .indicador span {
+            color: var(--secondary);
+            font-size: 13px;
+        }
+
+        .indicador strong {
+            display: block;
+            margin-top: 12px;
+            font-size: 32px;
+        }
+
+        .painel {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 24px;
+        }
+
+        .painel h2 {
+            font-size: 20px;
+            margin-bottom: 20px;
+        }
+
+        .pesquisa {
+            width: 100%;
+            padding: 14px;
+            background: #0f172a;
+            color: white;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            margin-bottom: 24px;
+            outline: none;
+        }
+
+        .pesquisa:focus {
+            border-color: #60a5fa;
+        }
+
+        .tabela-container {
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 800px;
+        }
+
+        th, td {
+            text-align: left;
+            padding: 15px 10px;
+            border-bottom: 1px solid var(--border);
+            font-size: 13px;
+        }
+
+        th {
+            color: var(--secondary);
+            font-weight: 600;
+        }
+
+        tbody tr:hover {
+            background: #243248;
+        }
+
+        .status {
+            display: inline-block;
+            padding: 5px 9px;
+            border-radius: 6px;
+            font-size: 11px;
+            white-space: nowrap;
+        }
+
+        .ativo {
+            color: #4ade80;
+            background: #14532d55;
+        }
+
+        .bloqueado {
+            color: #f87171;
+            background: #7f1d1d55;
+        }
+
+        .primeiro-acesso {
+            color: #fbbf24;
+            background: #78350f55;
+        }
+
+        .nivel-admin {
+            color: #60a5fa;
+        }
+
+        .nivel-superadmin {
+            color: #fbbf24;
+        }
+
+        #carregando {
+            padding: 40px;
+            text-align: center;
+            color: var(--secondary);
+        }
+
+        @media (max-width: 1050px) {
+
+            .indicadores {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+        }
+
+        @media (max-width: 700px) {
+
+            .sidebar {
+                position: relative;
+                width: 100%;
+                padding: 16px;
+                border-right: none;
+                border-bottom: 1px solid var(--border);
+            }
+
+            .sidebar p {
+                margin-bottom: 15px;
+            }
+
+            .conteudo {
+                margin-left: 0;
+                padding: 16px;
+            }
+
+            .indicador {
+                padding: 16px;
+            }
+
+            .painel {
+                padding: 16px;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+    <div id="carregando">
+        Verificando permissões administrativas...
+    </div>
+
+    <div id="app" hidden>
+
+        <aside class="sidebar">
+
+            <h2>Sistema de Gestão</h2>
+
+            <p id="administrador"></p>
+
+            <nav class="menu">
+
+                <a href="dashboard.html">
+                    Dashboard
+                </a>
+
+                <a href="admin.html" class="selecionado">
+                    Gerenciar usuários
+                </a>
+
+            </nav>
+
+            <div class="sidebar-footer">
+
+                <button id="sair">
+                    Sair do sistema
+                </button>
+
+            </div>
+
+        </aside>
+
+        <main class="conteudo">
+
+            <header class="cabecalho">
+
+                <h1>Painel administrativo</h1>
+
+                <p>Gerenciamento de usuários e acessos.</p>
+
+            </header>
+
+            <section class="indicadores">
+
+                <div class="indicador">
+
+                    <span>Total de usuários</span>
+
+                    <strong id="totalUsuarios">0</strong>
+
+                </div>
+
+                <div class="indicador">
+
+                    <span>Administradores</span>
+
+                    <strong id="totalAdmins"
+                            style="color: #60a5fa">0</strong>
+
+                </div>
+
+                <div class="indicador">
+
+                    <span>Usuários bloqueados</span>
+
+                    <strong id="totalBloqueados"
+                            style="color: #f87171">0</strong>
+
+                </div>
+
+                <div class="indicador">
+
+                    <span>Primeiro acesso</span>
+
+                    <strong id="totalPendentes"
+                            style="color: #fbbf24">0</strong>
+
+                </div>
+
+            </section>
+
+            <section class="painel">
+
+                <h2>Usuários cadastrados</h2>
+
+                <input
+                    type="search"
+                    id="pesquisa"
+                    class="pesquisa"
+                    placeholder="Pesquisar por nome, RF ou secretaria...">
+
+                <div class="tabela-container">
+
+                    <table>
+
+                        <thead>
+
+                            <tr>
+                                <th>RF</th>
+                                <th>Nome</th>
+                                <th>Cargo</th>
+                                <th>Secretaria</th>
+                                <th>Permissão</th>
+                                <th>Status</th>
+                                <th>Último acesso</th>
+                            </tr>
+
+                        </thead>
+
+                        <tbody id="listaUsuarios"></tbody>
+
+                    </table>
+
+                </div>
+
+                <div id="mensagem" role="status"></div>
+
+            </section>
+
+            <footer>
+                Sistema de Gestão &bull; Versão 1.0
+            </footer>
+
+        </main>
+
+    </div>
+
+    <script type="module">
+
+        import { supabase } from "./supabase.js";
+
+        import {
+            obterPerfil,
+            sair
+        } from "./auth.js";
+
+        let usuarios = [];
+
+        const permissoes = {
+            superadmin: "Administrador principal",
+            admin: "Administrador",
+            usuario: "Usuário comum"
+        };
+
+        function adicionarCelula(linha, texto, classe = "") {
+
+            const celula = document.createElement("td");
+
+            celula.textContent = texto;
+
+            if (classe) {
+                celula.className = classe;
+            }
+
+            linha.appendChild(celula);
+
+            return celula;
+
+        }
+
+        function renderizarUsuarios(lista) {
+
+            const tbody =
+                document.getElementById("listaUsuarios");
+
+            tbody.replaceChildren();
+
+            for (const usuario of lista) {
+
+                const linha = document.createElement("tr");
+
+                adicionarCelula(linha, usuario.rf);
+
+                adicionarCelula(linha, usuario.nome);
+
+                adicionarCelula(
+                    linha,
+                    usuario.cargo || "-"
+                );
+
+                adicionarCelula(
+                    linha,
+                    usuario.secretaria || "-"
+                );
+
+                adicionarCelula(
+                    linha,
+                    permissoes[usuario.perfil] || "Usuário",
+                    usuario.perfil === "superadmin"
+                        ? "nivel-superadmin"
+                        : usuario.perfil === "admin"
+                            ? "nivel-admin"
+                            : ""
+                );
+
+                const celulaStatus =
+                    document.createElement("td");
+
+                const status = document.createElement("span");
+
+                status.className = "status";
+
+                if (!usuario.ativo) {
+
+                    status.textContent = "Bloqueado";
+                    status.classList.add("bloqueado");
+
+                } else if (usuario.primeiro_acesso) {
+
+                    status.textContent = "Primeiro acesso";
+                    status.classList.add("primeiro-acesso");
+
+                } else {
+
+                    status.textContent = "Ativo";
+                    status.classList.add("ativo");
+
+                }
+
+                celulaStatus.appendChild(status);
+
+                linha.appendChild(celulaStatus);
+
+                adicionarCelula(
+                    linha,
+                    usuario.ultimo_acesso
+                        ? new Date(usuario.ultimo_acesso)
+                            .toLocaleString("pt-BR")
+                        : "Nunca"
+                );
+
+                tbody.appendChild(linha);
+
+            }
+
+            document.getElementById("mensagem").textContent =
+                lista.length === 0
+                    ? "Nenhum usuário encontrado."
+                    : "";
+
+        }
+
+        function atualizarIndicadores() {
+
+            document.getElementById("totalUsuarios")
+                .textContent = usuarios.length;
+
+            document.getElementById("totalAdmins")
+                .textContent = usuarios.filter(
+                    u => ["admin", "superadmin"].includes(u.perfil)
+                ).length;
+
+            document.getElementById("totalBloqueados")
+                .textContent = usuarios.filter(
+                    u => !u.ativo
+                ).length;
+
+            document.getElementById("totalPendentes")
+                .textContent = usuarios.filter(
+                    u => u.primeiro_acesso
+                ).length;
+
+        }
+
+        async function carregarUsuarios() {
+
+            const { data, error } =
+                await supabase.functions.invoke(
+                    "admin-usuarios",
+                    { body: {} }
+                );
+
+            if (error || !data?.sucesso) {
+
+                document.getElementById("mensagem")
+                    .textContent =
+                    "Não foi possível carregar os usuários.";
+
+                return;
+
+            }
+
+            usuarios = data.usuarios;
+
+            atualizarIndicadores();
+
+            renderizarUsuarios(usuarios);
+
+        }
+
+        document.getElementById("pesquisa")
+            .addEventListener("input", event => {
+
+                const termo =
+                    event.target.value.toLowerCase().trim();
+
+                const filtrados = usuarios.filter(usuario =>
+
+                    [
+                        usuario.rf,
+                        usuario.nome,
+                        usuario.cargo,
+                        usuario.secretaria
+                    ].some(valor =>
+                        String(valor || "")
+                            .toLowerCase()
+                            .includes(termo)
+                    )
+
+                );
+
+                renderizarUsuarios(filtrados);
+
+            });
+
+        document.getElementById("sair")
+            .addEventListener("click", sair);
+
+        async function iniciar() {
+
+            try {
+
+                const perfil = await obterPerfil();
+
+                if (
+                    !perfil ||
+                    !["admin", "superadmin"].includes(perfil.perfil)
+                ) {
+
+                    window.location.replace("dashboard.html");
+
+                    return;
+
+                }
+
+                document.getElementById("administrador")
+                    .textContent = permissoes[perfil.perfil];
+
+                document.getElementById("carregando")
+                    .hidden = true;
+
+                document.getElementById("app")
+                    .hidden = false;
+
+                await carregarUsuarios();
+
+            } catch {
+
+                window.location.replace("index.html");
+
+            }
+
+        }
+
+        iniciar();
+
+    </script>
+
+</body>
+</html>
