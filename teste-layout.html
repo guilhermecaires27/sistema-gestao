@@ -1,0 +1,157 @@
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Teste de Layout | Sistema de Gestão</title>
+
+    <link rel="stylesheet" href="layout.css">
+
+</head>
+
+<body class="sg-body">
+
+    <div id="carregando" class="sg-carregando">
+
+        Verificando sua sessão...
+
+    </div>
+
+    <div id="app" hidden>
+
+        <header class="sg-cabecalho">
+
+            <h1 id="saudacao"></h1>
+
+            <p>
+                Teste da nova estrutura compartilhada.
+            </p>
+
+        </header>
+
+        <section class="sg-grid">
+
+            <div class="sg-indicador">
+
+                <span>Autenticação</span>
+
+                <strong style="color:#4ade80">
+                    OK
+                </strong>
+
+            </div>
+
+            <div class="sg-indicador">
+
+                <span>Menu lateral</span>
+
+                <strong style="color:#60a5fa">
+                    OK
+                </strong>
+
+            </div>
+
+            <div class="sg-indicador">
+
+                <span>Permissões</span>
+
+                <strong style="color:#fbbf24">
+                    OK
+                </strong>
+
+            </div>
+
+            <div class="sg-indicador">
+
+                <span>Layout</span>
+
+                <strong>
+                    1.0
+                </strong>
+
+            </div>
+
+        </section>
+
+        <section class="sg-card">
+
+            <h2>Dados do usuário</h2>
+
+            <p id="nome"></p>
+
+            <p id="rf"></p>
+
+            <p id="cargo"></p>
+
+            <p id="secretaria"></p>
+
+            <a href="dashboard.html" class="sg-btn">
+
+                Voltar ao Dashboard
+
+            </a>
+
+        </section>
+
+    </div>
+
+    <script type="module">
+
+        import { montarLayout } from "./layout.js";
+
+        async function iniciar() {
+
+            try {
+
+                const perfil = await montarLayout({
+
+                    titulo: "Teste de estrutura",
+
+                    pagina: "teste"
+
+                });
+
+                if (!perfil) return;
+
+                document.getElementById("saudacao")
+                    .textContent =
+                        "Bem-vindo, " + perfil.nome;
+
+                document.getElementById("nome")
+                    .textContent =
+                        "Nome: " + perfil.nome;
+
+                document.getElementById("rf")
+                    .textContent =
+                        "RF: " + perfil.rf;
+
+                document.getElementById("cargo")
+                    .textContent =
+                        "Cargo: " + (perfil.cargo || "-");
+
+                document.getElementById("secretaria")
+                    .textContent =
+                        "Secretaria: " +
+                        (perfil.secretaria || "-");
+
+            } catch {
+
+                document.getElementById("carregando")
+                    .textContent =
+                        "Erro ao carregar o layout.";
+
+            }
+
+        }
+
+        iniciar();
+
+    </script>
+
+</body>
+</html>
