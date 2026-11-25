@@ -17,6 +17,12 @@ const ICONES = {
         <path d="M8 13h8M8 17h8"/>
     `,
 
+    justificativa: `
+        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+        <path d="M14 2v6h6"/>
+        <path d="m8 15 3 3 5-5"/>
+    `,
+
     avisos: `
         <path d="m3 11 18-7v16L3 14v-3z"/>
         <path d="m7 15 2 6h4l-2-5"/>
@@ -120,12 +126,14 @@ function iniciais(nome) {
 // CRIAR LINKS DO MENU
 
 function criarLink({
+
     texto,
     href,
     simbolo,
     pagina,
     paginaAtual,
     externo = false
+
 }) {
 
     const link = document.createElement("a");
@@ -260,7 +268,6 @@ export async function montarLayout({
 
             </div>
 
-
             <nav class="sg-menu">
 
                 <p class="sg-menu-titulo">
@@ -270,7 +277,6 @@ export async function montarLayout({
                 </p>
 
                 <div id="sgMenuPrincipal"></div>
-
 
                 <div id="sgAreaAdmin" hidden>
 
@@ -285,7 +291,6 @@ export async function montarLayout({
                 </div>
 
             </nav>
-
 
             <div class="sg-sidebar-footer">
 
@@ -308,7 +313,6 @@ export async function montarLayout({
 
         </aside>
 
-
         <div class="sg-conteudo">
 
             <header class="sg-topbar">
@@ -325,7 +329,6 @@ export async function montarLayout({
 
                 <h2 id="sgTitulo"></h2>
 
-
                 <div class="sg-usuario">
 
                     <button
@@ -337,7 +340,6 @@ export async function montarLayout({
                         ☀
 
                     </button>
-
 
                     <div class="sg-usuario-info">
 
@@ -355,7 +357,6 @@ export async function montarLayout({
 
             </header>
 
-
             <main class="sg-pagina"
                   id="sgPagina">
             </main>
@@ -363,7 +364,6 @@ export async function montarLayout({
         </div>
 
     `;
-
 
     const $ = id => document.getElementById(id);
 
@@ -384,7 +384,6 @@ export async function montarLayout({
 
 
     // MENU PRINCIPAL
-    // Disponivel para todos os usuarios
 
     const menuPrincipal = [
 
@@ -407,6 +406,13 @@ export async function montarLayout({
             href: "falta-abonada.html",
             simbolo: "abonada",
             pagina: "falta-abonada"
+        },
+
+        {
+            texto: "Justificativa",
+            href: "justificativa.html",
+            simbolo: "justificativa",
+            pagina: "justificativa"
         },
 
         {
@@ -435,7 +441,6 @@ export async function montarLayout({
 
 
     // MENU ADMINISTRATIVO
-    // Exclusivo para admin e superadmin
 
     const menuAdmin = [
 
@@ -508,7 +513,6 @@ export async function montarLayout({
 
     }
 
-
     $("sgAbrirMenu").addEventListener("click", () => {
 
         const aberto = $("sgSidebar")
@@ -523,7 +527,6 @@ export async function montarLayout({
 
     });
 
-
     $("sgOverlay").addEventListener(
 
         "click",
@@ -531,7 +534,6 @@ export async function montarLayout({
         fecharMenu
 
     );
-
 
     document.addEventListener("keydown", event => {
 
@@ -542,7 +544,6 @@ export async function montarLayout({
         }
 
     });
-
 
     document.querySelectorAll(".sg-menu a")
         .forEach(link => {
