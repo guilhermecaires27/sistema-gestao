@@ -378,6 +378,13 @@ export async function montarLayout({
     const menuAdmin = [
 
         {
+    texto: "Falta Abonada",
+    href: "falta-abonada.html",
+    simbolo: "abonada",
+    pagina: "falta-abonada"
+},
+
+        {
             texto: "Gerenciar usuários",
             href: "admin.html",
             simbolo: "usuarios",
