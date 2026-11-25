@@ -9,6 +9,11 @@ const PERMISSOES = {
 
 const ICONES = {
 
+    avisos: `
+    <path d="m3 11 18-7v16L3 14v-3z"/>
+    <path d="m7 15 2 6h4l-2-5"/>
+`,
+
     sistema: `
         <path d="M12 22s8-4 8-11V5l-8-3-8 3v6c0 7 8 11 8 11z"/>
         <path d="m9 12 2 2 4-4"/>
