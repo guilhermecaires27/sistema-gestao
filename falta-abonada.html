@@ -1,0 +1,336 @@
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Falta Abonada | Sistema de Gestão</title>
+
+    <link rel="stylesheet" href="layout.css">
+
+    <style>
+
+        .formulario {
+            max-width: 1000px;
+        }
+
+        .form-grupo {
+            margin-bottom: 22px;
+        }
+
+        .form-grupo label {
+            display: block;
+            font-size: 13px;
+            font-weight: 600;
+            margin-bottom: 9px;
+            color: var(--layout-secondary);
+        }
+
+        .consulta-rf {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .consulta-rf input {
+            max-width: 240px;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .form-grid-datas {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+        }
+
+        .form-acoes {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            border-top: 1px solid var(--layout-border);
+            padding-top: 22px;
+            margin-top: 20px;
+        }
+
+        .orientacao {
+            padding: 16px;
+            border: 1px solid var(--layout-border);
+            border-left: 4px solid #3273dc;
+            border-radius: 8px;
+            margin-bottom: 25px;
+            background: var(--layout-card);
+            color: var(--layout-secondary);
+            font-size: 13px;
+            line-height: 1.7;
+        }
+
+        input[readonly] {
+            opacity: .8;
+        }
+
+        #statusConsulta {
+            font-size: 12px;
+            margin-top: 10px;
+        }
+
+        .texto-sucesso {
+            color: var(--layout-success);
+        }
+
+        .texto-erro {
+            color: var(--layout-danger);
+        }
+
+        @media (max-width: 750px) {
+
+            .form-grid,
+            .form-grid-datas {
+                grid-template-columns: 1fr;
+                gap: 0;
+            }
+
+            .consulta-rf input {
+                max-width: none;
+            }
+
+            .form-acoes button,
+            .form-acoes a {
+                width: 100%;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+<body class="sg-body">
+
+    <div id="carregando" class="sg-carregando">
+
+        Verificando permissões...
+
+    </div>
+
+    <div id="app" hidden>
+
+        <header class="sg-cabecalho">
+
+            <h1>Falta Abonada</h1>
+
+            <p>
+                Emissão e registro de requerimentos
+                de falta abonada.
+            </p>
+
+        </header>
+
+        <div class="formulario">
+
+            <div class="orientacao">
+
+                Informe o registro funcional para
+                consultar os dados do funcionário
+                no Crachá Digital.
+
+                Os campos de nome e cargo poderão
+                ser ajustados manualmente.
+
+            </div>
+
+            <section class="sg-card">
+
+                <h2>Dados do funcionário</h2>
+
+                <form id="formAbonada">
+
+                    <div class="form-grupo">
+
+                        <label for="registro">
+                            Registro Funcional (RF)
+                        </label>
+
+                        <div class="consulta-rf">
+
+                            <input
+                                type="text"
+                                id="registro"
+                                class="sg-input"
+                                maxlength="6"
+                                inputmode="numeric"
+                                pattern="[0-9]{1,6}"
+                                placeholder="Digite o RF"
+                                required>
+
+                            <button
+                                type="button"
+                                id="consultar"
+                                class="sg-btn">
+
+                                Consultar
+
+                            </button>
+
+                        </div>
+
+                        <div id="statusConsulta"
+                             role="status">
+                        </div>
+
+                    </div>
+
+                    <div class="form-grupo">
+
+                        <label for="nome">
+                            Nome completo
+                        </label>
+
+                        <input
+                            type="text"
+                            id="nome"
+                            class="sg-input"
+                            maxlength="150"
+                            placeholder="Nome do funcionário"
+                            required>
+
+                    </div>
+
+                    <div class="form-grid">
+
+                        <div class="form-grupo">
+
+                            <label for="cargo">
+                                Cargo
+                            </label>
+
+                            <input
+                                type="text"
+                                id="cargo"
+                                class="sg-input"
+                                maxlength="120"
+                                placeholder="Cargo do funcionário"
+                                required>
+
+                        </div>
+
+                        <div class="form-grupo">
+
+                            <label for="secretaria">
+                                Secretaria
+                            </label>
+
+                            <input
+                                type="text"
+                                id="secretaria"
+                                class="sg-input"
+                                placeholder="Secretaria"
+                                readonly>
+
+                        </div>
+
+                    </div>
+
+                    <h2>Dados do requerimento</h2>
+
+                    <div class="form-grid-datas">
+
+                        <div class="form-grupo">
+
+                            <label for="dataAbonada">
+                                Data da falta abonada
+                            </label>
+
+                            <input
+                                type="date"
+                                id="dataAbonada"
+                                class="sg-input"
+                                required>
+
+                        </div>
+
+                        <div class="form-grupo">
+
+                            <label for="dataDocumento">
+                                Data do documento
+                            </label>
+
+                            <input
+                                type="date"
+                                id="dataDocumento"
+                                class="sg-input"
+                                readonly>
+
+                        </div>
+
+                        <div class="form-grupo">
+
+                            <label for="dataAnalise">
+                                Data da análise
+                            </label>
+
+                            <input
+                                type="date"
+                                id="dataAnalise"
+                                class="sg-input"
+                                readonly>
+
+                        </div>
+
+                    </div>
+
+                    <div class="form-acoes">
+
+                        <button
+                            type="submit"
+                            id="registrar"
+                            class="sg-btn sg-btn-success">
+
+                            Registrar abonada
+
+                        </button>
+
+                        <button
+                            type="button"
+                            id="gerarPdf"
+                            class="sg-btn"
+                            disabled>
+
+                            Gerar PDF
+
+                        </button>
+
+                        <button
+                            type="button"
+                            id="limpar"
+                            class="sg-btn sg-btn-secondary">
+
+                            Limpar campos
+
+                        </button>
+
+                    </div>
+
+                </form>
+
+            </section>
+
+        </div>
+
+    </div>
+
+    <script type="module"
+            src="./falta-abonada.js">
+    </script>
+
+</body>
+</html>
