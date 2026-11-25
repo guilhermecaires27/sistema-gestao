@@ -42,10 +42,10 @@
                     <input
                         type="text"
                         id="rf"
-                        name="rf"
                         placeholder="Digite seu RF"
                         inputmode="numeric"
-                        pattern="[0-9]+"
+                        pattern="[0-9]{1,6}"
+                        maxlength="6"
                         autocomplete="username"
                         required>
                 </div>
@@ -59,7 +59,6 @@
                         <input
                             type="password"
                             id="senha"
-                            name="senha"
                             placeholder="Digite sua senha"
                             autocomplete="current-password"
                             required>
@@ -92,9 +91,7 @@
             <div class="divider"></div>
 
             <div class="register">
-                Não possui acesso ao sistema?
-                <br>
-                Entre em contato com o administrador.
+                Sistema integrado ao Crachá Digital.
             </div>
 
         </section>
@@ -105,93 +102,105 @@
 
     </main>
 
-    
-<script type="module">
+    <script type="module">
 
-    import { realizarLogin } from "./auth.js";
+        import { realizarLogin } from "./auth.js";
 
-    const formulario = document.getElementById("loginForm");
-    const senha = document.getElementById("senha");
-    const toggle = document.getElementById("togglePassword");
-    const mensagem = document.getElementById("mensagem");
+        const formulario =
+            document.getElementById("loginForm");
 
-    const botao = formulario.querySelector(
-        'button[type="submit"]'
-    );
+        const senha =
+            document.getElementById("senha");
 
-    toggle.addEventListener("click", function () {
+        const mensagem =
+            document.getElementById("mensagem");
 
-        const mostrar = senha.type === "password";
+        const toggle =
+            document.getElementById("togglePassword");
 
-        senha.type = mostrar ? "text" : "password";
+        const botao =
+            formulario.querySelector('button[type="submit"]');
 
-        toggle.textContent = mostrar
-            ? "Ocultar"
-            : "Mostrar";
+        toggle.addEventListener("click", () => {
 
-    });
+            const mostrar = senha.type === "password";
 
-    formulario.addEventListener("submit", async function (event) {
+            senha.type = mostrar ? "text" : "password";
 
-        event.preventDefault();
-
-        const rf = document.getElementById("rf").value.trim();
-
-        botao.disabled = true;
-        botao.textContent = "Validando acesso...";
-
-        mensagem.className = "";
-        mensagem.textContent = "Consultando informações...";
-
-        try {
-
-            const resultado = await realizarLogin(
-                rf,
-                senha.value
-            );
-
-            if (!resultado.sucesso) {
-
-                mensagem.className = "erro";
-                mensagem.textContent = resultado.mensagem;
-                return;
-
-            }
-
-            mensagem.className = "sucesso";
-
-            mensagem.textContent = resultado.primeiro_acesso
-                ? "Login validado! Alteração de senha necessária."
-                : "Login validado com sucesso!";
-
-        } catch {
-
-            mensagem.className = "erro";
-            mensagem.textContent = "Erro ao realizar login.";
-
-        } finally {
-
-            botao.disabled = false;
-            botao.textContent = "Entrar no sistema";
-
-        }
-
-    });
-
-    document.getElementById("forgotPassword")
-        .addEventListener("click", function (event) {
-
-            event.preventDefault();
-
-            mensagem.className = "";
-
-            mensagem.textContent =
-                "Entre em contato com o administrador para redefinir sua senha.";
+            toggle.textContent =
+                mostrar ? "Ocultar" : "Mostrar";
 
         });
 
-</script>
+        formulario.addEventListener("submit", async (event) => {
 
+            event.preventDefault();
+
+            botao.disabled = true;
+            botao.textContent = "Validando acesso...";
+
+            mensagem.className = "";
+            mensagem.textContent = "Consultando Crachá Digital...";
+
+            try {
+
+                const resultado = await realizarLogin(
+                    document.getElementById("rf").value.trim(),
+                    senha.value
+                );
+
+                if (!resultado.sucesso) {
+
+                    mensagem.className = "erro";
+                    mensagem.textContent = resultado.mensagem;
+
+                    return;
+
+                }
+
+                senha.value = "";
+
+                if (resultado.primeiro_acesso) {
+
+                    window.location.replace(
+                        "alterar-senha.html"
+                    );
+
+                } else {
+
+                    window.location.replace(
+                        "dashboard.html"
+                    );
+
+                }
+
+            } catch {
+
+                mensagem.className = "erro";
+                mensagem.textContent = "Erro ao realizar login.";
+
+            } finally {
+
+                botao.disabled = false;
+                botao.textContent = "Entrar no sistema";
+
+            }
+
+        });
+
+        document.getElementById("forgotPassword")
+            .addEventListener("click", (event) => {
+
+                event.preventDefault();
+
+                mensagem.className = "";
+
+                mensagem.textContent =
+                    "Entre em contato com o administrador.";
+
+            });
+
+    </script>
 
 </body>
 </html>
