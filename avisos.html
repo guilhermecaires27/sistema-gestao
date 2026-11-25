@@ -1,0 +1,983 @@
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Avisos | Sistema de Gestão</title>
+
+    <link rel="stylesheet" href="layout.css">
+
+    <style>
+
+        .cabecalho-avisos {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+
+        .form-grupo {
+            margin-bottom: 18px;
+        }
+
+        .form-grupo label {
+            display: block;
+            color: var(--layout-secondary);
+            font-size: 13px;
+            margin-bottom: 8px;
+        }
+
+        textarea {
+            min-height: 150px;
+            resize: vertical;
+            font-family: inherit;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+        }
+
+        .opcoes {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 24px;
+            margin: 20px 0;
+        }
+
+        .opcoes label {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 14px;
+            cursor: pointer;
+        }
+
+        input[type="checkbox"] {
+            accent-color: #2563eb;
+            width: 17px;
+            height: 17px;
+        }
+
+        .aviso {
+            background: var(--layout-card);
+            border: 1px solid var(--layout-border);
+            border-left: 4px solid #60a5fa;
+            border-radius: 10px;
+            padding: 24px;
+            margin-bottom: 18px;
+        }
+
+        .aviso.importante {
+            border-left-color: #fbbf24;
+        }
+
+        .aviso.urgente {
+            border-left-color: #f87171;
+        }
+
+        .aviso-topo {
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 14px;
+        }
+
+        .prioridade {
+            font-size: 12px;
+            padding: 5px 9px;
+            border-radius: 5px;
+            background: #2563eb20;
+            color: #60a5fa;
+        }
+
+        .importante .prioridade {
+            background: #f59e0b20;
+            color: #fbbf24;
+        }
+
+        .urgente .prioridade {
+            background: #dc262620;
+            color: #f87171;
+        }
+
+        .aviso h2 {
+            font-size: 20px;
+            margin: 0 0 15px;
+            overflow-wrap: anywhere;
+        }
+
+        .aviso-texto {
+            font-size: 14px;
+            line-height: 1.8;
+            color: #cbd5e1;
+            white-space: pre-wrap;
+            overflow-wrap: anywhere;
+        }
+
+        .aviso-rodape {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 12px;
+            border-top: 1px solid var(--layout-border);
+            padding-top: 15px;
+            margin-top: 20px;
+        }
+
+        .aviso-data {
+            color: var(--layout-secondary);
+            font-size: 12px;
+        }
+
+        .aviso-acoes {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .fixado {
+            color: #fbbf24;
+            font-size: 12px;
+        }
+
+        .inativo {
+            color: #f87171;
+            font-size: 12px;
+        }
+
+        #mensagem {
+            font-size: 14px;
+            margin-bottom: 18px;
+        }
+
+        .sucesso {
+            color: var(--layout-success);
+        }
+
+        .erro {
+            color: var(--layout-danger);
+        }
+
+        @media (max-width: 750px) {
+
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .aviso {
+                padding: 18px;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+<body class="sg-body">
+
+    <div id="carregando" class="sg-carregando">
+
+        Verificando sessão...
+
+    </div>
+
+    <div id="app" hidden>
+
+        <header class="cabecalho-avisos">
+
+            <div class="sg-cabecalho"
+                 style="margin-bottom:0">
+
+                <h1>Mural de avisos</h1>
+
+                <p>
+                    Comunicados e informações do sistema.
+                </p>
+
+            </div>
+
+            <button id="novoAviso"
+                    class="sg-btn"
+                    hidden>
+
+                + Novo aviso
+
+            </button>
+
+        </header>
+
+        <div id="mensagem" role="status"></div>
+
+        <!-- Formulário administrativo -->
+
+        <section id="editor" class="sg-card" hidden>
+
+            <h2 id="tituloEditor">
+                Novo comunicado
+            </h2>
+
+            <form id="formAviso">
+
+                <div class="form-grupo">
+
+                    <label for="titulo">
+                        Título do comunicado
+                    </label>
+
+                    <input
+                        type="text"
+                        id="titulo"
+                        class="sg-input"
+                        maxlength="150"
+                        required
+                        placeholder="Digite o título...">
+
+                </div>
+
+                <div class="form-grupo">
+
+                    <label for="texto">
+                        Mensagem
+                    </label>
+
+                    <textarea
+                        id="texto"
+                        class="sg-input"
+                        maxlength="5000"
+                        required
+                        placeholder="Digite o comunicado..."></textarea>
+
+                </div>
+
+                <div class="form-grid">
+
+                    <div class="form-grupo">
+
+                        <label for="prioridade">
+                            Prioridade
+                        </label>
+
+                        <select
+                            id="prioridade"
+                            class="sg-select">
+
+                            <option value="normal">
+                                Normal
+                            </option>
+
+                            <option value="importante">
+                                Importante
+                            </option>
+
+                            <option value="urgente">
+                                Urgente
+                            </option>
+
+                        </select>
+
+                    </div>
+
+                    <div class="form-grupo">
+
+                        <label for="expiracao">
+                            Exibir até (opcional)
+                        </label>
+
+                        <input
+                            type="date"
+                            id="expiracao"
+                            class="sg-input">
+
+                    </div>
+
+                </div>
+
+                <div class="opcoes">
+
+                    <label>
+
+                        <input type="checkbox"
+                               id="fixado">
+
+                        Fixar no topo
+
+                    </label>
+
+                    <label>
+
+                        <input type="checkbox"
+                               id="ativo"
+                               checked>
+
+                        Aviso ativo
+
+                    </label>
+
+                </div>
+
+                <button type="submit"
+                        id="salvar"
+                        class="sg-btn sg-btn-success">
+
+                    Publicar aviso
+
+                </button>
+
+                <button type="button"
+                        id="cancelar"
+                        class="sg-btn sg-btn-secondary">
+
+                    Cancelar
+
+                </button>
+
+            </form>
+
+        </section>
+
+        <!-- Lista de avisos -->
+
+        <section id="listaAvisos"></section>
+
+    </div>
+
+    <script type="module">
+
+        import { montarLayout } from "./layout.js";
+
+        import { supabase } from "./supabase.js";
+
+        const $ = id => document.getElementById(id);
+
+        let administrador = false;
+
+        let editando = null;
+
+        let processando = false;
+
+        const prioridades = {
+
+            normal: "Informativo",
+
+            importante: "Importante",
+
+            urgente: "Urgente"
+
+        };
+
+        function mensagem(texto, erro = false) {
+
+            $("mensagem").textContent = texto;
+
+            $("mensagem").className =
+                erro ? "erro" : "sucesso";
+
+        }
+
+        function formatarData(valor) {
+
+            return new Date(valor).toLocaleString(
+                "pt-BR",
+                {
+                    timeZone: "America/Sao_Paulo",
+                    dateStyle: "short",
+                    timeStyle: "short"
+                }
+            );
+
+        }
+
+        function dataLocal(valor) {
+
+            const partes = new Intl.DateTimeFormat(
+                "en-CA",
+                {
+                    timeZone: "America/Sao_Paulo",
+                    year: "numeric",
+                    month: "2-digit",
+                    day: "2-digit"
+                }
+            ).formatToParts(new Date(valor));
+
+            const obter = tipo =>
+                partes.find(p => p.type === tipo).value;
+
+            return [
+                obter("year"),
+                obter("month"),
+                obter("day")
+            ].join("-");
+
+        }
+
+        function criarElemento(tag, texto, classe) {
+
+            const elemento =
+                document.createElement(tag);
+
+            elemento.textContent = texto || "";
+
+            if (classe) {
+                elemento.className = classe;
+            }
+
+            return elemento;
+
+        }
+
+        function abrirEditor(aviso = null) {
+
+            if (!administrador || processando) return;
+
+            editando = aviso?.id || null;
+
+            $("tituloEditor").textContent =
+                editando
+                    ? "Editar comunicado"
+                    : "Novo comunicado";
+
+            $("salvar").textContent =
+                editando
+                    ? "Salvar alterações"
+                    : "Publicar aviso";
+
+            $("titulo").value =
+                aviso?.titulo || "";
+
+            $("texto").value =
+                aviso?.mensagem || "";
+
+            $("prioridade").value =
+                aviso?.prioridade || "normal";
+
+            $("fixado").checked =
+                aviso?.fixado || false;
+
+            $("ativo").checked =
+                aviso?.ativo ?? true;
+
+            $("expiracao").value =
+                aviso?.expira_em
+                    ? dataLocal(aviso.expira_em)
+                    : "";
+
+            $("editor").hidden = false;
+
+            $("editor").scrollIntoView({
+                behavior: "smooth",
+                block: "start"
+            });
+
+            $("titulo").focus();
+
+        }
+
+        function fecharEditor() {
+
+            editando = null;
+
+            $("editor").hidden = true;
+
+            $("formAviso").reset();
+
+        }
+
+        function criarBotao(texto, classe, acao) {
+
+            const botao = criarElemento(
+                "button",
+                texto,
+                "sg-btn " + classe
+            );
+
+            botao.disabled = processando;
+
+            botao.addEventListener("click", acao);
+
+            return botao;
+
+        }
+
+        function criarAviso(aviso) {
+
+            const artigo = criarElemento(
+                "article",
+                "",
+                "aviso " + aviso.prioridade
+            );
+
+            const topo = criarElemento(
+                "div",
+                "",
+                "aviso-topo"
+            );
+
+            topo.appendChild(
+
+                criarElemento(
+                    "span",
+                    prioridades[aviso.prioridade],
+                    "prioridade"
+                )
+
+            );
+
+            if (aviso.fixado) {
+
+                topo.appendChild(
+                    criarElemento(
+                        "span",
+                        "📌 Fixado",
+                        "fixado"
+                    )
+                );
+
+            }
+
+            if (!aviso.ativo) {
+
+                topo.appendChild(
+                    criarElemento(
+                        "span",
+                        "Desativado",
+                        "inativo"
+                    )
+                );
+
+            } else if (
+                aviso.expira_em &&
+                new Date(aviso.expira_em) <= new Date()
+            ) {
+
+                topo.appendChild(
+                    criarElemento(
+                        "span",
+                        "Expirado",
+                        "inativo"
+                    )
+                );
+
+            }
+
+            artigo.appendChild(topo);
+
+            artigo.appendChild(
+                criarElemento("h2", aviso.titulo)
+            );
+
+            artigo.appendChild(
+
+                criarElemento(
+                    "div",
+                    aviso.mensagem,
+                    "aviso-texto"
+                )
+
+            );
+
+            const rodape = criarElemento(
+                "div",
+                "",
+                "aviso-rodape"
+            );
+
+            let data =
+                "Publicado em " +
+                formatarData(aviso.criado_em);
+
+            if (aviso.expira_em) {
+
+                data +=
+                    " • Válido até " +
+                    formatarData(aviso.expira_em);
+
+            }
+
+            rodape.appendChild(
+
+                criarElemento(
+                    "span",
+                    data,
+                    "aviso-data"
+                )
+
+            );
+
+            if (administrador) {
+
+                const acoes = criarElemento(
+                    "div",
+                    "",
+                    "aviso-acoes"
+                );
+
+                acoes.appendChild(
+
+                    criarBotao(
+                        "Editar",
+                        "sg-btn-secondary",
+                        () => abrirEditor(aviso)
+                    )
+
+                );
+
+                acoes.appendChild(
+
+                    criarBotao(
+                        aviso.ativo
+                            ? "Desativar"
+                            : "Ativar",
+
+                        "sg-btn-warning",
+
+                        () => alterarStatus(aviso)
+                    )
+
+                );
+
+                acoes.appendChild(
+
+                    criarBotao(
+                        "Excluir",
+                        "sg-btn-danger",
+                        () => excluirAviso(aviso)
+                    )
+
+                );
+
+                rodape.appendChild(acoes);
+
+            }
+
+            artigo.appendChild(rodape);
+
+            return artigo;
+
+        }
+
+        async function carregarAvisos() {
+
+            const lista = $("listaAvisos");
+
+            lista.textContent = "Carregando avisos...";
+
+            const { data, error } = await supabase
+                .from("avisos")
+                .select("*")
+                .order("fixado", {
+                    ascending: false
+                })
+                .order("criado_em", {
+                    ascending: false
+                });
+
+            lista.replaceChildren();
+
+            if (error) {
+
+                mensagem(
+                    "Não foi possível carregar os avisos.",
+                    true
+                );
+
+                return;
+
+            }
+
+            if (!data?.length) {
+
+                lista.appendChild(
+
+                    criarElemento(
+                        "div",
+                        "Nenhum comunicado disponível.",
+                        "sg-card"
+                    )
+
+                );
+
+                return;
+
+            }
+
+            for (const aviso of data) {
+
+                lista.appendChild(
+                    criarAviso(aviso)
+                );
+
+            }
+
+        }
+
+        $("formAviso").addEventListener(
+            "submit",
+            async event => {
+
+                event.preventDefault();
+
+                if (!administrador || processando) return;
+
+                const titulo =
+                    $("titulo").value.trim();
+
+                const texto =
+                    $("texto").value.trim();
+
+                if (!titulo || !texto) {
+
+                    mensagem(
+                        "Preencha o título e a mensagem.",
+                        true
+                    );
+
+                    return;
+
+                }
+
+                processando = true;
+
+                $("salvar").disabled = true;
+
+                const expiracao =
+                    $("expiracao").value;
+
+                const dados = {
+
+                    titulo,
+
+                    mensagem: texto,
+
+                    prioridade:
+                        $("prioridade").value,
+
+                    fixado:
+                        $("fixado").checked,
+
+                    ativo:
+                        $("ativo").checked,
+
+                    expira_em:
+                        expiracao
+                            ? new Date(
+                                expiracao +
+                                "T23:59:59.999-03:00"
+                            ).toISOString()
+                            : null
+
+                };
+
+                try {
+
+                    let resultado;
+
+                    if (editando) {
+
+                        resultado = await supabase
+                            .from("avisos")
+                            .update(dados)
+                            .eq("id", editando)
+                            .select("id")
+                            .single();
+
+                    } else {
+
+                        resultado = await supabase
+                            .from("avisos")
+                            .insert(dados)
+                            .select("id")
+                            .single();
+
+                    }
+
+                    if (resultado.error) {
+                        throw resultado.error;
+                    }
+
+                    fecharEditor();
+
+                    mensagem(
+                        "Comunicado salvo com sucesso."
+                    );
+
+                    processando = false;
+
+                    await carregarAvisos();
+
+                } catch {
+
+                    mensagem(
+                        "Não foi possível salvar o comunicado.",
+                        true
+                    );
+
+                } finally {
+
+                    processando = false;
+
+                    $("salvar").disabled = false;
+
+                }
+
+            }
+        );
+
+        async function alterarStatus(aviso) {
+
+            if (!administrador || processando) return;
+
+            processando = true;
+
+            try {
+
+                const { error } = await supabase
+                    .from("avisos")
+                    .update({
+                        ativo: !aviso.ativo
+                    })
+                    .eq("id", aviso.id)
+                    .select("id")
+                    .single();
+
+                if (error) throw error;
+
+                mensagem(
+                    aviso.ativo
+                        ? "Comunicado desativado."
+                        : "Comunicado ativado."
+                );
+
+                processando = false;
+
+                await carregarAvisos();
+
+            } catch {
+
+                mensagem(
+                    "Não foi possível alterar o status.",
+                    true
+                );
+
+            } finally {
+
+                processando = false;
+
+            }
+
+        }
+
+        async function excluirAviso(aviso) {
+
+            if (!administrador || processando) return;
+
+            if (!confirm(
+                "Deseja excluir este comunicado?\n\n" +
+                aviso.titulo
+            )) return;
+
+            processando = true;
+
+            try {
+
+                const { error } = await supabase
+                    .from("avisos")
+                    .delete()
+                    .eq("id", aviso.id)
+                    .select("id")
+                    .single();
+
+                if (error) throw error;
+
+                if (editando === aviso.id) {
+
+                    fecharEditor();
+
+                }
+
+                mensagem(
+                    "Comunicado excluído com sucesso."
+                );
+
+                processando = false;
+
+                await carregarAvisos();
+
+            } catch {
+
+                mensagem(
+                    "Não foi possível excluir o comunicado.",
+                    true
+                );
+
+            } finally {
+
+                processando = false;
+
+            }
+
+        }
+
+        $("novoAviso").addEventListener(
+            "click",
+            () => abrirEditor()
+        );
+
+        $("cancelar").addEventListener(
+            "click",
+            fecharEditor
+        );
+
+        async function iniciar() {
+
+            try {
+
+                const perfil = await montarLayout({
+
+                    titulo: "Mural de avisos",
+
+                    pagina: "avisos"
+
+                });
+
+                if (!perfil) return;
+
+                administrador =
+                    ["admin", "superadmin"]
+                        .includes(perfil.perfil);
+
+                $("novoAviso").hidden =
+                    !administrador;
+
+                await carregarAvisos();
+
+            } catch {
+
+                $("app").hidden = true;
+
+                $("carregando").hidden = false;
+
+                $("carregando").textContent =
+                    "Não foi possível carregar o mural.";
+
+            }
+
+        }
+
+        iniciar();
+
+    </script>
+
+</body>
+</html>
