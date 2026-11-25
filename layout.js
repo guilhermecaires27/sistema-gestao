@@ -1,4 +1,4 @@
-
+import { iniciarTema } from "./tema.js";
 import { obterPerfil, sair } from "./auth.js";
 import { confirmar } from "./alertas.js";
 
@@ -282,6 +282,15 @@ export async function montarLayout({
                 <h2 id="sgTitulo"></h2>
 
                 <div class="sg-usuario">
+                <button
+    type="button"
+    class="sg-tema"
+    id="sgAlternarTema"
+    aria-label="Alternar tema">
+
+    ☀
+
+</button>
 
                     <div class="sg-usuario-info">
 
@@ -486,8 +495,10 @@ export async function montarLayout({
 
     }
 
-    app.hidden = false;
+    iniciarTema();
 
-    return perfil;
+app.hidden = false;
+
+return perfil;
 
 }
