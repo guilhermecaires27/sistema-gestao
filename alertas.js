@@ -1,11 +1,21 @@
 
 import Swal from "https://cdn.jsdelivr.net/npm/sweetalert2@11.26.25/+esm";
 
-// Tema Bulma
+import { obterTema } from "./tema.js";
 
-export const Alerta = Swal.mixin({
+// Identificar tema atual
 
-    theme: "bulma-dark",
+function temaAtual() {
+
+    return obterTema() === "claro"
+        ? "bulma-light"
+        : "bulma-dark";
+
+}
+
+// Configurações compartilhadas
+
+const configuracao = {
 
     confirmButtonText: "OK",
 
@@ -15,52 +25,100 @@ export const Alerta = Swal.mixin({
 
     heightAuto: false
 
-});
+};
+
+// Alerta com tema dinâmico
+
+export const Alerta = {
+
+    fire(opcoes = {}) {
+
+        return Swal.fire({
+
+            ...configuracao,
+
+            ...opcoes,
+
+            theme: temaAtual()
+
+        });
+
+    }
+
+};
 
 // Sucesso
 
-export function sucesso(mensagem, titulo = "Sucesso!") {
+export function sucesso(
+    mensagem,
+    titulo = "Sucesso!"
+) {
 
     return Alerta.fire({
+
         icon: "success",
+
         titleText: titulo,
+
         text: mensagem
+
     });
 
 }
 
 // Erro
 
-export function erro(mensagem, titulo = "Algo deu errado!") {
+export function erro(
+    mensagem,
+    titulo = "Algo deu errado!"
+) {
 
     return Alerta.fire({
+
         icon: "error",
+
         titleText: titulo,
+
         text: mensagem
+
     });
 
 }
 
 // Atenção
 
-export function aviso(mensagem, titulo = "Atenção!") {
+export function aviso(
+    mensagem,
+    titulo = "Atenção!"
+) {
 
     return Alerta.fire({
+
         icon: "warning",
+
         titleText: titulo,
+
         text: mensagem
+
     });
 
 }
 
 // Informação
 
-export function informacao(mensagem, titulo = "Informação") {
+export function informacao(
+    mensagem,
+    titulo = "Informação"
+) {
 
     return Alerta.fire({
+
         icon: "info",
+
         titleText: titulo,
+
         text: mensagem
+
     });
 
 }
@@ -87,8 +145,9 @@ export async function confirmar(
 
         cancelButtonText: "Cancelar",
 
-        confirmButtonColor:
-            perigoso ? "#f14668" : undefined,
+        ...(perigoso
+            ? { confirmButtonColor: "#f14668" }
+            : {}),
 
         focusCancel: true
 
@@ -98,7 +157,7 @@ export async function confirmar(
 
 }
 
-// Notificação flutuante
+// Notificações flutuantes
 
 export function notificacao(
     mensagem,
