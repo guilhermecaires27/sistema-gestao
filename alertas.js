@@ -39,7 +39,24 @@ export const Alerta = {
 
             ...opcoes,
 
-            theme: temaAtual()
+            theme: temaAtual(),
+
+            didOpen: elemento => {
+
+                if (!opcoes.toast) {
+                    const acoes = elemento.querySelector(".swal2-actions");
+                    if (acoes) {
+                        acoes.style.setProperty("justify-content", "center", "important");
+                        acoes.style.setProperty("align-items", "center", "important");
+                        acoes.style.setProperty("margin-inline", "auto", "important");
+                    }
+                }
+
+                if (typeof opcoes.didOpen === "function") {
+                    opcoes.didOpen(elemento);
+                }
+
+            }
 
         });
 
