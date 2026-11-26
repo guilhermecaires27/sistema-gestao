@@ -41,5 +41,6 @@ async function iniciar(){try{
     $('gerarPdf').type='button';$('gerarPdf').addEventListener('click',()=>executar(true));$('gerarPdf').disabled=false;
     $('limpar').addEventListener('click',()=>{if(!ocupado){$('dataAbonada').value='';datas();limparPdf();}});
     $('dataAbonada').addEventListener('input',limparPdf);
+    import("./documentos-solicitacoes.js").then(m=>m.iniciarEnvioDocumento("abonada","dataAbonada")).catch(e=>{const painel=$("docEnvio");painel.hidden=false;painel.textContent="Não foi possível carregar o envio de documentos: "+e.message;});
 }catch(e){$('app').hidden=true;$('carregando').hidden=false;$('carregando').textContent=e.message;}}
 iniciar();
