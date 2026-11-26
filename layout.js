@@ -11,6 +11,7 @@ const PERMISSOES = {
 };
 
 const ICONES = {
+    recolher: `<rect x="3" y="4" width="18" height="16" rx="2"/><path d="M9 4v16m7-11-3 3 3 3"/>`,
     notificacoes: `<path d="M18 8a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9M10 21h4"/>`,
 
     ferias: `<rect x="3" y="5" width="18" height="16" rx="2"/><path d="M16 3v4M8 3v4M3 10h18M8 15h2M14 15h2"/>`,
@@ -146,9 +147,12 @@ function criarLink({
 
     link.innerHTML = icone(simbolo);
 
-    link.appendChild(
-        document.createTextNode(texto)
-    );
+    const rotulo = document.createElement("span");
+    rotulo.className = "sg-menu-texto";
+    rotulo.textContent = texto;
+    link.appendChild(rotulo);
+    link.title = texto;
+    link.setAttribute("aria-label", texto);
 
     if (pagina && pagina === paginaAtual) {
 
@@ -299,11 +303,11 @@ export async function montarLayout({
             <div class="sg-sidebar-footer">
 
                 <button class="sg-btn sg-btn-sair"
-                        id="sgSair">
+                        id="sgSair" title="Sair do sistema" aria-label="Sair do sistema">
 
                     ${icone("sair")}
 
-                    Sair do sistema
+                    <span class="sg-menu-texto">Sair do sistema</span>
 
                 </button>
 
@@ -321,6 +325,8 @@ export async function montarLayout({
 
             <header class="sg-topbar">
 
+                <div class="sg-topbar-inicio">
+                <button type="button" class="sg-recolher-menu" id="sgRecolherMenu" aria-controls="sgSidebar" aria-expanded="true" title="Recolher menu" aria-label="Recolher menu">${icone("recolher")}</button>
                 <button
                     class="sg-btn sg-btn-secondary sg-abrir-menu"
                     id="sgAbrirMenu"
@@ -332,6 +338,7 @@ export async function montarLayout({
                 </button>
 
                 <h2 id="sgTitulo"></h2>
+                </div>
 
                 <div class="sg-usuario">
                     <a href="notificacoes.html" id="sgNotificacoes" aria-label="Notificações" title="Notificações" style="position:relative;display:inline-flex;align-items:center;justify-content:center;width:38px;height:38px;flex-shrink:0;color:var(--layout-text);text-decoration:none">${icone("notificacoes")}<span id="sgNotificacoesTotal" hidden style="position:absolute;top:0;right:0;background:#dc2626;color:white;font-size:10px;min-width:16px;height:16px;border-radius:10px;display:grid;place-items:center;padding:0 3px"></span></a>
@@ -456,6 +463,7 @@ export async function montarLayout({
     // MENU ADMINISTRATIVO
 
     const menuAdmin = [
+        {texto:"Calendário de férias",href:"calendario-ferias.html",simbolo:"ferias",pagina:"calendario-ferias"},
         {texto:"Painel administrativo",href:"painel-admin.html",simbolo:"inicio",pagina:"painel-admin"},
 
         {
@@ -512,6 +520,24 @@ export async function montarLayout({
 
     }
 
+
+    // MENU COMPACTO NO DESKTOP
+    function aplicarMenuCompacto(recolhido) {
+        document.body.classList.toggle("sg-menu-recolhido", recolhido);
+        const botao = $("sgRecolherMenu");
+        const texto = recolhido ? "Expandir menu" : "Recolher menu";
+        botao.setAttribute("aria-expanded", String(!recolhido));
+        botao.setAttribute("aria-label", texto);
+        botao.title = texto;
+    }
+    let menuCompacto = false;
+    try { menuCompacto = localStorage.getItem("sg-menu-compacto") === "1"; } catch {}
+    aplicarMenuCompacto(menuCompacto);
+    $("sgRecolherMenu").addEventListener("click", () => {
+        menuCompacto = !document.body.classList.contains("sg-menu-recolhido");
+        aplicarMenuCompacto(menuCompacto);
+        try { localStorage.setItem("sg-menu-compacto", menuCompacto ? "1" : "0"); } catch {}
+    });
 
     // MENU RESPONSIVO
 
