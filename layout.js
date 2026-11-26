@@ -1,4 +1,5 @@
 
+import { supabase } from "./supabase.js";
 import { iniciarTema } from "./tema.js";
 import { obterPerfil, sair } from "./auth.js";
 import { confirmar } from "./alertas.js";
@@ -10,6 +11,7 @@ const PERMISSOES = {
 };
 
 const ICONES = {
+    notificacoes: `<path d="M18 8a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9M10 21h4"/>`,
 
     ferias: `<rect x="3" y="5" width="18" height="16" rx="2"/><path d="M16 3v4M8 3v4M3 10h18M8 15h2M14 15h2"/>`,
 
@@ -332,6 +334,7 @@ export async function montarLayout({
                 <h2 id="sgTitulo"></h2>
 
                 <div class="sg-usuario">
+                    <a href="notificacoes.html" id="sgNotificacoes" aria-label="Notificações" title="Notificações" style="position:relative;display:inline-flex;align-items:center;justify-content:center;width:38px;height:38px;flex-shrink:0;color:var(--layout-text);text-decoration:none">${icone("notificacoes")}<span id="sgNotificacoesTotal" hidden style="position:absolute;top:0;right:0;background:#dc2626;color:white;font-size:10px;min-width:16px;height:16px;border-radius:10px;display:grid;place-items:center;padding:0 3px"></span></a>
 
                     <button
                         type="button"
@@ -388,6 +391,7 @@ export async function montarLayout({
     // MENU PRINCIPAL
 
     const menuPrincipal = [
+        {texto:"Notificações",href:"notificacoes.html",simbolo:"notificacoes",pagina:"notificacoes"},
 
         {
             texto: "Mural de avisos",
@@ -452,6 +456,7 @@ export async function montarLayout({
     // MENU ADMINISTRATIVO
 
     const menuAdmin = [
+        {texto:"Painel administrativo",href:"painel-admin.html",simbolo:"inicio",pagina:"painel-admin"},
 
         {
             texto: "Gerenciar usuários",
@@ -609,7 +614,22 @@ export async function montarLayout({
     // EXIBIR PAGINA
 
     app.hidden = false;
-
+    async function atualizarNotificacoes(){
+        try {
+            const {count,error}=await supabase.from("notificacoes_portal").select("id",{count:"exact",head:true}).is("lida_em",null);
+            if(error)return;
+            const n=count||0,b=$("sgNotificacoesTotal");
+            b.textContent=n>99?"99+":String(n);
+            b.hidden=!n;
+            b.style.display=n?"grid":"none";
+            $("sgNotificacoes").setAttribute("aria-label",n+" notificações não lidas");
+        } catch {}
+    }
+    atualizarNotificacoes();
+    window.addEventListener("sg-notificacoes-atualizar",atualizarNotificacoes);
+    window.addEventListener("focus",atualizarNotificacoes);
+    const intervalo=setInterval(()=>{if(!document.hidden)atualizarNotificacoes();},30000);
+    window.addEventListener("pagehide",()=>clearInterval(intervalo),{once:true});
     return perfil;
 
 }
