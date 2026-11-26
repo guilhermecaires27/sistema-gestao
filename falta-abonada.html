@@ -12,6 +12,7 @@
     <title>Falta Abonada | Sistema de Gestão</title>
 
     <link rel="stylesheet" href="layout.css">
+    <link rel="stylesheet" href="documentos-solicitacoes.css">
 
     <style>
 
@@ -275,12 +276,28 @@
 
             </section>
 
+            <section class="sg-card" id="docEnvio" hidden>
+                <h2>Enviar PDF para análise</h2>
+                <p class="doc-muted">Selecione o PDF final, já preenchido e assinado, se necessário. Apenas gerar o documento não o encaminha para aprovação.</p>
+                <form id="docForm" class="doc-form">
+                    <label for="docData">Data de referência do documento<input type="date" id="docData" class="sg-input" required></label>
+                    <label for="docArquivo">Selecionar arquivo PDF<input type="file" id="docArquivo" class="sg-input" accept=".pdf,application/pdf" required></label>
+                    <p class="doc-muted">Somente PDF, até 10 MB. O arquivo ficará disponível para você e para a administração autorizada.</p>
+                    <div class="doc-acoes"><button type="submit" id="docEnviar" class="sg-btn sg-btn-success">Enviar para análise</button></div>
+                </form>
+                <hr style="border:0;border-top:1px solid var(--layout-border);margin:24px 0">
+                <h2>Meus documentos enviados</h2>
+                <button type="button" id="docAtualizar" class="sg-btn sg-btn-secondary">Atualizar</button>
+                <p id="docStatus" class="doc-muted" role="status"></p><div id="docLista"></div>
+                <div class="doc-acoes"><button type="button" id="docAnterior" class="sg-btn sg-btn-secondary" disabled>Anterior</button><button type="button" id="docProxima" class="sg-btn sg-btn-secondary" disabled>Próxima</button></div>
+            </section>
+
         </div>
 
     </div>
 
     <script type="module"
-            src="./falta-abonada.js">
+            src="./falta-abonada.js?v=2">
     </script>
 
 </body>
