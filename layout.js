@@ -463,6 +463,7 @@ export async function montarLayout({
     // MENU ADMINISTRATIVO
 
     const menuAdmin = [
+        {texto:"Aprovação de documentos",href:"aprovacao-documentos.html",simbolo:"justificativa",pagina:"aprovacao-documentos"},
         {texto:"Calendário de férias",href:"calendario-ferias.html",simbolo:"ferias",pagina:"calendario-ferias"},
         {texto:"Painel administrativo",href:"painel-admin.html",simbolo:"inicio",pagina:"painel-admin"},
 
