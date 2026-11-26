@@ -1,0 +1,12 @@
+<!doctype html>
+<html lang="pt-BR"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Aprovação de documentos | Sistema de Gestão</title><link rel="stylesheet" href="layout.css"><link rel="stylesheet" href="documentos-solicitacoes.css"></head>
+<body class="sg-body"><div id="carregando" class="sg-carregando">Verificando sessão...</div><div id="app" hidden>
+<header class="sg-cabecalho"><h1>Aprovação de documentos</h1><p>Analise faltas abonadas e justificativas encaminhadas pelos funcionários.</p></header>
+<section class="sg-card"><h2>Solicitações recebidas</h2><p class="doc-muted">Baixe e confira o PDF antes de aprovar ou recusar. A decisão será comunicada ao funcionário.</p>
+<div class="doc-filtros"><label>Tipo de documento<select id="docTipo" class="sg-input"><option value="">Todos</option><option value="abonada">Falta abonada</option><option value="justificativa">Justificativa</option></select></label><label>Situação<select id="docFiltro" class="sg-input"><option value="pendentes" selected>Aguardando decisão</option><option value="">Todas</option><option value="pendente">Pendente</option><option value="em_analise">Em análise</option><option value="aprovado">Aprovado</option><option value="recusado">Recusado</option></select></label><label>Funcionário<input id="docBusca" class="sg-input" placeholder="Pesquisar nome ou RF"></label></div>
+<button type="button" id="docAtualizar" class="sg-btn sg-btn-secondary">Atualizar</button><p id="docStatus" class="doc-muted" role="status"></p><div id="docLista"></div><div class="doc-acoes"><button id="docAnterior" type="button" class="sg-btn sg-btn-secondary" disabled>Anterior</button><button id="docProxima" type="button" class="sg-btn sg-btn-secondary" disabled>Próxima</button></div></section></div>
+<script type="module">
+import {montarLayout} from "./layout.js";
+import {iniciarAdministracaoDocumentos} from "./documentos-solicitacoes.js";
+try{const perfil=await montarLayout({titulo:"Aprovação de documentos",pagina:"aprovacao-documentos",somenteAdmin:true});if(perfil)await iniciarAdministracaoDocumentos();}catch(e){document.getElementById("app").hidden=true;const c=document.getElementById("carregando");c.hidden=false;c.textContent=e.message;}
+</script></body></html>
