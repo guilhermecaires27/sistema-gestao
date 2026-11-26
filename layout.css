@@ -731,3 +731,21 @@ body.sg-body,
     }
 
 }
+
+/* Menu lateral recolhível no computador; menu móvel permanece inalterado. */
+.sg-topbar-inicio{display:flex;align-items:center;gap:14px;min-width:0}
+.sg-topbar-inicio h2{overflow-wrap:anywhere}
+.sg-recolher-menu{display:none;flex-shrink:0;width:40px;height:40px;padding:0;align-items:center;justify-content:center;border:1px solid var(--layout-border);border-radius:8px;background:var(--layout-card);color:var(--layout-text);cursor:pointer}
+.sg-recolher-menu:hover,.sg-recolher-menu:focus-visible{border-color:var(--layout-primary)}
+@media(min-width:751px){
+    .sg-recolher-menu{display:inline-flex}
+    body.sg-menu-recolhido{--layout-sidebar-width:76px}
+    body.sg-menu-recolhido .sg-sidebar{padding:24px 12px;overflow-x:hidden}
+    body.sg-menu-recolhido .sg-marca{padding:0;justify-content:center;margin-bottom:24px}
+    body.sg-menu-recolhido .sg-marca>div:not(.sg-marca-icone),body.sg-menu-recolhido .sg-menu-texto,body.sg-menu-recolhido .sg-versao{display:none}
+    body.sg-menu-recolhido .sg-menu-titulo{font-size:0;padding:0;border-top:1px solid var(--layout-border);margin:16px 4px 10px}
+    body.sg-menu-recolhido .sg-menu a{justify-content:center;padding:13px 0;gap:0}
+    body.sg-menu-recolhido .sg-btn-sair{padding:11px 0;gap:0}
+    body.sg-menu-recolhido .sg-btn-sair svg{flex-shrink:0}
+    body.sg-menu-recolhido .sg-recolher-menu svg{transform:scaleX(-1)}
+}
