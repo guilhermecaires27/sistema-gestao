@@ -38,5 +38,6 @@ async function iniciar(){try{
     $('data').value=hoje();adicionarHorario(false);contador();
     $('adicionarHorario').onclick=()=>adicionarHorario();$('motivo').addEventListener('input',contador);$('anexo').onchange=selecionarAnexo;$('removerAnexo').onclick=removerAnexo;$('limpar').onclick=limpar;
     $('formJustificativa').addEventListener('input',limparPdf);$('formJustificativa').addEventListener('submit',gerar);$('gerarPdf').type='submit';$('gerarPdf').disabled=false;
+    import("./documentos-solicitacoes.js").then(m=>m.iniciarEnvioDocumento("justificativa","data")).catch(e=>{const painel=$("docEnvio");painel.hidden=false;painel.textContent="Não foi possível carregar o envio de documentos: "+e.message;});
 }catch(e){$('app').hidden=true;$('carregando').hidden=false;$('carregando').textContent=e.message;}}
 iniciar();
