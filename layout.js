@@ -475,51 +475,43 @@ export async function montarLayout({
     ];
 
 
-    // CARREGAR MENU COM DROPDOWN
-    function adicionarGrupo(destino, chave, titulo, simbolo, itens) {
-        const grupo = document.createElement("details");
-        grupo.className = "sg-menu-grupo";
-        const resumo = document.createElement("summary");
-        resumo.innerHTML = icone(simbolo);
-        resumo.appendChild(document.createTextNode(titulo));
-        const seta = document.createElementNS("http://www.w3.org/2000/svg","svg");
-        seta.setAttribute("viewBox","0 0 24 24");
-        seta.setAttribute("class","sg-menu-seta");
-        seta.setAttribute("fill","none");
-        seta.setAttribute("stroke","currentColor");
-        seta.setAttribute("stroke-width","2");
-        seta.setAttribute("aria-hidden","true");
-        const linha = document.createElementNS("http://www.w3.org/2000/svg","path");
-        linha.setAttribute("d","m6 9 6 6 6-6");
-        seta.appendChild(linha);
-        resumo.appendChild(seta);
-        const sub = document.createElement("div");
-        sub.className = "sg-menu-subgrupo";
-        for (const item of itens) sub.appendChild(criarLink({...item,paginaAtual:pagina}));
-        grupo.append(resumo,sub);
-        const ativa = itens.some(item => item.pagina === pagina && item.pagina);
-        let salvo = null;
-        try { salvo = sessionStorage.getItem("sg-menu-"+chave); } catch {}
-        grupo.open = ativa || salvo === "1";
-        grupo.addEventListener("toggle", () => {
-            try { sessionStorage.setItem("sg-menu-"+chave,grupo.open?"1":"0"); } catch {}
-        });
-        destino.appendChild(grupo);
+    // CARREGAR MENU PRINCIPAL
+
+    for (const item of menuPrincipal) {
+
+        $("sgMenuPrincipal").appendChild(
+
+            criarLink({
+                ...item,
+                paginaAtual: pagina
+            })
+
+        );
+
     }
 
-    const principal = $("sgMenuPrincipal");
-    const selecionar = nomes => nomes.map(nome => menuPrincipal.find(item => item.texto === nome)).filter(Boolean);
-    for (const item of selecionar(["Início","Mural de avisos","Notificações"])) {
-        principal.appendChild(criarLink({...item,paginaAtual:pagina}));
-    }
-    adicionarGrupo(principal,"servicos","Serviços funcionais","ferias",
-        selecionar(["Falta Abonada","Justificativa","Férias"]));
-    adicionarGrupo(principal,"conta","Minha conta","perfil",
-        selecionar(["Meu perfil","Crachá Digital","Alterar senha"]));
+
+    // CARREGAR MENU ADMINISTRATIVO
+
     if (administrador) {
+
         $("sgAreaAdmin").hidden = false;
-        adicionarGrupo($("sgMenuAdmin"),"admin","Gestão administrativa","usuarios",menuAdmin);
+
+        for (const item of menuAdmin) {
+
+            $("sgMenuAdmin").appendChild(
+
+                criarLink({
+                    ...item,
+                    paginaAtual: pagina
+                })
+
+            );
+
+        }
+
     }
+
 
     // MENU RESPONSIVO
 
