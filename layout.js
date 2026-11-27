@@ -67,6 +67,9 @@ const ICONES = {
         <path d="M5 16c0-4 6-4 6 0M14 10h5M14 14h5"/>
     `,
 
+    ponto: `<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2M7 2 3 6M17 2l4 4"/>`,
+    holerite: `<path d="M6 3h12v18l-3-2-3 2-3-2-3 2zM9 7h6M9 11h6M9 15h3"/>`,
+
     senha: `
         <rect x="4" y="11" width="16" height="11" rx="2"/>
         <path d="M8 11V7a4 4 0 0 1 8 0v4"/>
@@ -447,6 +450,20 @@ export async function montarLayout({
                 "https://crachadigital.praiagrande.sp.gov.br/?rf=" +
                 encodeURIComponent(perfil.rf),
             simbolo: "cracha",
+            externo: true
+        },
+
+        {
+            texto: "Ponto Eletrônico",
+            href: "https://pontoeletronico.praiagrande.sp.gov.br/index2.asp",
+            simbolo: "ponto",
+            externo: true
+        },
+
+        {
+            texto: "Holerite",
+            href: "https://portal.conam.com.br/rhpraiagrande/login.php",
+            simbolo: "holerite",
             externo: true
         },
 
